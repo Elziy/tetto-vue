@@ -1,0 +1,48 @@
+<template>
+    <div>
+        <navbar></navbar>
+        <!--封面-->
+        <div style="height: 250px;width: 100%;">
+            <img class="userInfo-bg-img" src="@/assets/images/board.png" alt="">
+        </div>
+        <el-main>
+            <!--用户信息-->
+            <user-info></user-info>
+        </el-main>
+        <!--作品和收藏-->
+        <div class="container" style="height: 600px;">
+            <works-and-likes></works-and-likes>
+        </div>
+    </div>
+</template>
+
+<script>
+import navbar from "@/components/common/navbar";
+import userInfo from "@/components/space/userInfo";
+import worksAndLikes from "@/components/space/worksAndLikes";
+
+export default {
+    name: "index",
+    components: {
+        navbar,
+        userInfo,
+        worksAndLikes
+    },
+    data() {
+        return {
+            xl: {
+                span: 3,
+            }
+        }
+    },
+};
+</script>
+
+<style scoped>
+.userInfo-bg-img {
+    height: 120%;
+    width: 100%;
+    object-fit: cover;
+}
+
+</style>
