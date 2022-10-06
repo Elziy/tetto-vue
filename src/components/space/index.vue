@@ -11,7 +11,7 @@
             <user-info></user-info>
         </el-main>
         <!--作品和收藏-->
-        <div class="container" style="height: 600px;">
+        <div class="container">
             <works-and-likes></works-and-likes>
         </div>
     </div>
@@ -39,7 +39,7 @@ export default {
         this.$store.dispatch("space/setUserInfo", this.uid);
         setTimeout(() => {
             this.show = true;
-        }, 50);
+        }, 10);
     }
 };
 </script>

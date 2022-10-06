@@ -9,7 +9,8 @@
                     class="demo-ruleForm"
                     title="注册">
                 <el-form-item prop="email">
-                    <el-input prefix-icon="el-icon-message" v-model="addForm.email" placeholder="请输入您的邮箱"></el-input>
+                    <el-input prefix-icon="el-icon-message" v-model="addForm.email"
+                              placeholder="请输入您的邮箱"></el-input>
                 </el-form-item>
                 <el-form-item prop="password">
                     <el-input prefix-icon="el-icon-lock" type="password" v-model="addForm.password"
@@ -31,6 +32,24 @@ import axios from "axios";
 
 export default {
     data() {
+        let checkEmail = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请输入邮箱'));
+            } else {
+                if (this.validEmail(value)) {
+                    this.$http.get('auth/user/checkEmail/' + value)
+                            .then((res) => {
+                                if (res.data.code === 0) {
+                                    callback();
+                                } else {
+                                    callback(new Error('该邮箱已被注册'));
+                                }
+                            });
+                } else {
+                    callback(new Error('请输入正确的邮箱'));
+                }
+            }
+        };
         return {
             addForm: {
                 password: '',
@@ -47,13 +66,8 @@ export default {
                     },
                 ],
                 email: [
-                    {required: true, message: '请输入邮箱地址', trigger: 'blur'},
-                    {
-                        type: 'email',
-                        message: '请输入正确的邮箱地址',
-                        trigger: ['blur', 'change'],
-                    },
-                ]
+                    {validator: checkEmail, trigger: 'blur'}
+                ],
             },
         }
     },
@@ -82,6 +96,10 @@ export default {
                                 }
                         );
             })
+        },
+        validEmail(email) {
+            let reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+            return reg.test(email);
         },
     },
 }

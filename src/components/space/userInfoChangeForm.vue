@@ -1,6 +1,6 @@
 <template>
-    <el-form ref="form" :model="form" label-width="60px" label-position="top" size="medium">
-        <el-form-item>
+    <el-form ref="form" :model="form" :rules="rules" label-width="60px" label-position="top" size="medium">
+        <el-form-item prop="username">
             <span style="color:#99a9bf;">昵称</span>
             <el-input show-word-limit maxlength="12" type="text" v-model="form.username"></el-input>
         </el-form-item>
@@ -20,7 +20,7 @@
             </el-radio-group>
         </el-form-item>
 
-        <el-form-item>
+        <el-form-item prop="email">
             <span style="color:#99a9bf;">邮箱</span>
             <el-input type="text" v-model="form.email"></el-input>
         </el-form-item>
@@ -45,6 +45,24 @@
 export default {
     name: "userInfoChangeForm",
     data() {
+        let checkEmail = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请输入邮箱'));
+            } else {
+                if (this.validEmail(value)) {
+                    this.$http.get('auth/user/checkEmail/' + value)
+                            .then((res) => {
+                                if (res.data.code === 0) {
+                                    callback();
+                                } else {
+                                    callback(new Error('该邮箱已被注册'));
+                                }
+                            });
+                } else {
+                    callback(new Error('请输入正确的邮箱'));
+                }
+            }
+        };
         return {
             form: {
                 id: this.$store.state.auth.uid,
@@ -53,25 +71,47 @@ export default {
                 sex: this.$store.state.space.userInfo.sex,
                 email: this.$store.state.space.userInfo.email,
                 birthday: this.$store.state.space.userInfo.birthday
+            },
+            rules: {
+                email: [
+                    {validator: checkEmail, trigger: 'blur'}
+                ],
+                username: [
+                    {required: true, message: '请输入昵称', trigger: 'blur'}
+                ]
             }
+
         }
     },
     methods: {
+        validEmail(email) {
+            let reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+            return reg.test(email);
+        },
         onSubmit() {
-            this.$http.post('auth/user/update', this.form).then(res => {
-                        if (res.data.code === 0) {
-                            this.$store.dispatch('space/setUserInfo', this.$store.state.auth.uid);
-                            this.$store.commit('auth/SET_UID', this.form.id);
-                            this.$store.commit('auth/SET_USERNAME', this.form.username);
-                            this.$message.success('修改成功');
-                        } else {
-                            this.$message.error('修改失败');
-                        }
-                    },
-                    error => {
-                        this.$message.error('修改失败');
+            this.$refs['form'].validate((valid) => {
+                if (valid) {
+                    this.$http.post('auth/user/update', this.form).then(res => {
+                                if (res.data.code === 0) {
+                                    this.$store.dispatch('space/setUserInfo', this.$store.state.auth.uid);
+                                    this.$store.commit('auth/SET_UID', this.form.id);
+                                    this.$store.commit('auth/SET_USERNAME', this.form.username);
+                                    this.$message.success('修改成功');
+                                } else {
+                                    this.$message.error('修改失败');
+                                }
+                            },
+                            error => {
+                                this.$message.error('修改失败');
+                            });
+                } else {
+                    this.$message({
+                        message: '请检查输入',
+                        type: 'error'
                     });
-
+                    return false;
+                }
+            });
         }
     },
 }

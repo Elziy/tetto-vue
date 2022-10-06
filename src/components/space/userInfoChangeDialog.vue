@@ -6,6 +6,7 @@
                center
                class="dialog"
                :destroy-on-close="true"
+               :close-on-click-modal="false"
     >
         <!--头像-->
         <el-row>
@@ -33,6 +34,9 @@
         </el-row>
         <hr>
         <user-info-change-form></user-info-change-form>
+        <div style="text-align: center">
+            <el-button @click="dialog = false">返 回</el-button>
+        </div>
     </el-dialog>
 </template>
 

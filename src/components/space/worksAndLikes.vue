@@ -3,7 +3,7 @@
         <el-tab-pane label="作品" name="works" :lazy="true">
             <user-works></user-works>
         </el-tab-pane>
-        <el-tab-pane label="收藏" name="likes" :lazy="true">
+        <el-tab-pane v-if="$store.state.space.self" label="收藏" name="likes" :lazy="true">
             <!--<div class="container">-->
             <!--    <el-row>-->
             <!--        <el-col :span="2" :offset="2">-->
@@ -20,7 +20,7 @@
             <!--</div>-->
             <user-likes :img-num="likeNum" empty="暂无收藏"></user-likes>
         </el-tab-pane>
-        <el-tab-pane label="浏览历史" name="histories" :lazy="true">
+        <el-tab-pane v-if="$store.state.space.self" label="浏览历史" name="histories" :lazy="true">
             <user-likes :imgNum="historyNum" empty="暂无历史"></user-likes>
         </el-tab-pane>
     </el-tabs>

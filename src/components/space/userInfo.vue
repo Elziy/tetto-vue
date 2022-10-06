@@ -29,6 +29,11 @@
                         </el-col>
                     </el-row>
                 </div>
+                <div v-if="this.$store.state.space.userInfo.introduce" style="padding-top: 10px">
+                    <span style="font-size: 14px;color: #606266">个人介绍</span>
+                    <el-divider direction="vertical"></el-divider>
+                    <span style="font-size: 14px;color: #606266">{{ this.$store.state.space.userInfo.introduce | introduce }}</span>
+                </div>
                 <div style="padding-top: 10px">
                     <el-link :underline="false" class="follow" @click="userInfo">
                         <span style="font-size: 15px">查看个人资料</span>
@@ -36,20 +41,24 @@
                     <user-info-dialog
                             ref="info-dialog"
                             @closeLog="userInfo"
+                            @changeInfo="changeInfo"
                     ></user-info-dialog>
                 </div>
             </el-col>
+
             <el-col v-if="$store.state.space.self === false" :span="6" :offset="7" style="padding-top: 40px">
                 <el-button round class="info-change-button" @click="toFollowing">
                     <span style="font-weight: bold">+关注</span>
                 </el-button>
             </el-col>
+
             <el-col v-else :span="6" :offset="7" style="padding-top: 40px">
                 <el-button round class="info-change-button" @click="changeInfo">
                     <span style="font-weight: bold">编辑个人资料</span>
                 </el-button>
                 <user-info-change-dialog ref="change-dialog"
                                          @closeLog="changeInfo"
+                                         @changeOver="changeInfo"
                 ></user-info-change-dialog>
             </el-col>
 

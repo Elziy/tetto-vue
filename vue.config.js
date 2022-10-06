@@ -5,6 +5,7 @@ module.exports = {
 			'tetto.com',
 			'*.tetto.com'
 		],
+		host: 'art.tetto.com',
 		"port": 80,
 		"open": true,
 		proxy: {

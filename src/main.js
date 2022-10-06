@@ -79,6 +79,14 @@ Vue.filter('title', function (title) {
 	}
 });
 
+Vue.filter('introduce', function (title) {
+	if (title.length > 20) {
+		return title.slice(0, 20) + ' ···';
+	} else {
+		return title
+	}
+});
+
 import store from "@/store";
 
 import { VueCropper } from 'vue-cropper'

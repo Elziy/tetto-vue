@@ -6,8 +6,7 @@
 
 <script>
 
-export default {
-}
+export default {}
 </script>
 
 
@@ -50,7 +49,8 @@ html, body {
     overflow: auto;
     margin: 0;
 }
-html{
+
+html {
     overflow-y: auto;
 }
 </style>
