@@ -1,5 +1,5 @@
 <template>
-    <a href="http://192.168.31.243/index">
+    <a href="http://art.tetto.com">
         <img src="@/assets/logo/logo2.png" alt="logo">
     </a>
 </template>

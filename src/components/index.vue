@@ -24,16 +24,6 @@ export default {
         tags,
         recommendedWorks
     },
-    created() {
-        this.master = window.sessionStorage.getItem('username')
-        this.activePath = window.sessionStorage.getItem('activePath');
-    },
-    data() {
-        return {
-            activeIndex: '/index',
-            activeIndex2: '1',
-        };
-    }
 };
 </script>
 <style scoped>

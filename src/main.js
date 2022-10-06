@@ -1,14 +1,14 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
+import './assets/css/global.css'
 
 Vue.config.productionTip = false
-
-import './assets/css/global.css'
 
 //导入element
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+
 Vue.use(ElementUI)
 
 //导入fas图标
@@ -19,40 +19,78 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 // 导入axios
 import axios from 'axios'
 // 配置请求的根路径
-// axios.defaults.baseURL = 'http://timemeetyou.com:8889/api/private/v1/'
-axios.defaults.baseURL = '192.168.31.243:88/api/'
-Vue.prototype.$http = axios
-axios.defaults.headers.post['Content-Type'] =
-  'application/x-www-form-urlencoded'
+axios.defaults.baseURL = 'http://art.tetto.com/api/'
 
+axios.defaults.headers.post['Content-Type'] =
+	'application/x-www-form-urlencoded'
+
+// axios.interceptors.request.use(
+// 	function (config) {
+// 		// 拦截每次请求,携带token
+// 		config.headers.token = localStorage.getItem('token')
+// 		return config
+// 	},
+// 	function (error) {
+// 		return Promise.reject(error)
+// 	}
+// )
+
+//请求拦截器
 axios.interceptors.request.use(
-  function(config) {
-    // 拦截每次请求,携带token
-    // console.log(config)
-    // config.headers.Authorization = window.sessionStorage.getItem('token')
-    config.headers.Authorization =
-      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjUwMCwicmlkIjowLCJpYXQiOjE2MjA2MTIyMDEsImV4cCI6MTYyMDY5ODYwMX0.DUiTSubyRzZadT0r7XMdpF6imQHvS_iihi1nerGfs8g'
-    return config
-  },
-  function(error) {
-    // Do something with request error
-    return Promise.reject(error)
-    // console.log('wrong')
-  }
+	config => {
+		if (localStorage.getItem('token') == null) {
+			return config
+		} else {
+			config.headers.token = localStorage.getItem('token')
+			return config
+		}
+	},
+	error => {
+		return Promise.error(error);
+	}
 )
 
-Vue.filter('dateFormat', function(originVal) {
-  const dt = new Date(originVal * 1000)
-  const y = dt.getFullYear()
-  const m = (dt.getMonth() + 1 + '').padStart(2, '0')
-  const d = (dt.getDate() + '').padStart(2, '0')
-  const hh = (dt.getHours() + '').padStart(2, '0')
-  const mm = (dt.getMinutes() + '').padStart(2, '0')
-  const ss = (dt.getSeconds() + '').padStart(2, '0')
-  return `${y}-${m}-${d} ${hh}:${mm}:${ss}`
-})
+Vue.prototype.$http = axios
+
+Vue.filter('dateFormat', function (input) {
+	let d = new Date(input);
+	let year = d.getFullYear();
+	let month = d.getMonth() + 1;
+	let day = d.getDate() < 10 ? '0' + d.getDate() : '' + d.getDate();
+	let hour = d.getHours();
+	let minutes = d.getMinutes();
+	let seconds = d.getSeconds();
+	return year + '-' + month + '-' + day + ' ' + hour + ':' + minutes + ':' + seconds;
+});
+
+Vue.filter('birthdayFormat', function (input) {
+	let d = new Date(input);
+	let year = d.getFullYear();
+	let month = d.getMonth() + 1;
+	let day = d.getDate() < 10 ? '0' + d.getDate() : '' + d.getDate();
+	return year + '-' + month + '-' + day;
+});
+
+Vue.filter('title', function (title) {
+	if (title.length > 10) {
+		return title.slice(0, 10) + '...';
+	} else {
+		return title
+	}
+});
+
+import store from "@/store";
+
+import { VueCropper } from 'vue-cropper'
+Vue.use(VueCropper);
+
 
 new Vue({
-  router,
-  render: (h) => h(App),
+	store,
+	router,
+	render: (h) => h(App),
+	beforeCreate() {
+		// 安装全局事件总线
+		Vue.prototype.$bus = this
+	}
 }).$mount('#app')

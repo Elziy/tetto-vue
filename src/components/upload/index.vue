@@ -1,9 +1,13 @@
 <template>
     <div>
         <navbar></navbar>
-        <el-main>
-            <div class="container" style="text-align: center">
-                <upload></upload>
+        <el-main class="container">
+            <div style="text-align: center">
+                <upload ref="upload" :limit="10"></upload>
+            </div>
+            <hr>
+            <div class="container" style="width: 700px;">
+                <upload-form></upload-form>
             </div>
         </el-main>
     </div>
@@ -12,14 +16,30 @@
 <script>
 import navbar from "@/components/common/navbar";
 import upload from "@/components/upload/upload";
+import uploadForm from "@/components/upload/uploadForm";
 
 export default {
     name: "index",
     components: {
         navbar,
-        upload
+        upload,
+        uploadForm
+    },
+    computed: {
+        imgUrls() {
+            return this.$refs.upload.imgUrls;
+        },
+        thumbnailUrl() {
+            return this.$refs.upload.thumbnailUrl;
+        },
+    },
+    methods: {
+        show() {
+            console.log(this.$refs.upload.imgUrls)
+            console.log(this.thumbnailUrl)
+        },
     }
-}
+};
 </script>
 
 <style scoped>

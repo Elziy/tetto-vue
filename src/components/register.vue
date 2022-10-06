@@ -59,13 +59,13 @@ export default {
     },
     methods: {
         login() {
-            this.$router.push("/login")
+            this.$router.replace('/login')
         },
         addUser() {
             //先进行校验
             this.$refs.addFormRef.validate(async (valid) => {
                 if (!valid) return
-                axios.post("http://192.168.31.243:88/api/auth/user/register", this.addForm)
+                axios.post("auth/user/register", this.addForm)
                         .then(response => {
                                     if (response.data.code === 0) {
                                         this.$message.success("注册成功");
@@ -73,14 +73,11 @@ export default {
                                     } else if (response.data.code === 150001) {
                                         this.$message.error("该邮箱已被注册");
                                     } else {
-                                        this.$message.error("网络异常,请稍后重试");
+                                        this.$message.error("服务器异常,请稍后重试");
                                     }
                                 },
                                 error => {
-                                    this.$message({
-                                        message: error.message,
-                                        type: "error"
-                                    });
+                                    this.$message.error('网络异常,请稍后重试');
                                     return false;
                                 }
                         );

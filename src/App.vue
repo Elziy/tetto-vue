@@ -44,4 +44,13 @@ export default {
 .overflowAuto::-webkit-scrollbar-thumb {
     background: #c1c1c1;
 }
+
+html, body {
+    height: 100%;
+    overflow: auto;
+    margin: 0;
+}
+html{
+    overflow-y: auto;
+}
 </style>

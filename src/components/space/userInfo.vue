@@ -1,27 +1,30 @@
 <template>
     <div>
         <el-row type="flex" class="row-bg">
-            <el-col :span="4" :offset="1" :xl="xl">
+            <el-col :span="4" :offset="1">
                 <!--头像-->
                 <div class="face-space">
-                    <img class="face-img" src="@/assets/images/face.jpg" alt="face">
+                    <el-avatar :size="100" :src="$store.state.space.userInfo.avatar" alt="avatar">
+                        <el-avatar style="padding-top: 12px" icon="el-icon-user-solid"></el-avatar>
+                    </el-avatar>
+                    <!--<img class="face-img" :src="loginUser.avatar" alt="avatar">-->
                 </div>
             </el-col>
 
             <el-col :span="9" style="padding-top: 40px">
                 <div>
-                    <span style="font-weight: bold;font-size: 30px">埃及房管局</span>
+                    <span style="font-weight: bold;font-size: 30px">{{ $store.state.space.userInfo.username }}</span>
                 </div>
                 <div>
                     <el-row type="flex" class="row-bg">
-                        <el-col :span="8">
+                        <el-col :span="6">
                             <el-link :underline="false" class="follow" @click="following">
-                                关注 <span class="follow-span">1251</span>
+                                关注 <span class="follow-span">{{ $store.state.space.userInfo.following || 0 }}</span>
                             </el-link>
                         </el-col>
                         <el-col :span="8">
                             <el-link :underline="false" class="follow" @click="follows">
-                                粉丝 <span class="follow-span">2166500</span>
+                                粉丝 <span class="follow-span">{{ $store.state.space.userInfo.follows || 0 }}</span>
                             </el-link>
                         </el-col>
                     </el-row>
@@ -31,20 +34,25 @@
                         <span style="font-size: 15px">查看个人资料</span>
                     </el-link>
                     <user-info-dialog
-                            :dialogTableVisible="dialogTableVisible"
+                            ref="info-dialog"
                             @closeLog="userInfo"
                     ></user-info-dialog>
                 </div>
             </el-col>
-            <el-col :span="6" :offset="7" style="padding-top: 40px">
+            <el-col v-if="$store.state.space.self === false" :span="6" :offset="7" style="padding-top: 40px">
+                <el-button round class="info-change-button" @click="toFollowing">
+                    <span style="font-weight: bold">+关注</span>
+                </el-button>
+            </el-col>
+            <el-col v-else :span="6" :offset="7" style="padding-top: 40px">
                 <el-button round class="info-change-button" @click="changeInfo">
                     <span style="font-weight: bold">编辑个人资料</span>
                 </el-button>
-                <user-info-change-dialog
-                        :infoChangeDialog="infoChangeDialog"
-                        @closeLog="changeInfo"
+                <user-info-change-dialog ref="change-dialog"
+                                         @closeLog="changeInfo"
                 ></user-info-change-dialog>
             </el-col>
+
         </el-row>
     </div>
 </template>
@@ -61,11 +69,10 @@ export default {
     },
     data() {
         return {
-            dialogTableVisible: false,
+            infoDialog: false,
             infoChangeDialog: false
         }
     },
-
     methods: {
         following() {
             this.$message.success("关注")
@@ -74,11 +81,16 @@ export default {
             this.$message.success("粉丝")
         },
         userInfo() {
-            this.dialogTableVisible = !this.dialogTableVisible
+            this.infoDialog = !this.infoDialog
+            this.$refs["info-dialog"].dialog = this.infoDialog
         },
         changeInfo() {
             this.infoChangeDialog = !this.infoChangeDialog
+            this.$refs["change-dialog"].dialog = this.infoChangeDialog
         },
+        toFollowing() {
+            this.$message.success("+关注")
+        }
     }
 }
 </script>
@@ -118,6 +130,23 @@ export default {
 .info-change-button:focus {
     background: #ecf5ff;
     color: #333333;
+    /*opacity: 0.5;*/
+}
+
+.follow-button {
+    width: 120px;
+    color: #ecf5ff;
+    background: #559eff !important;
+}
+
+.follow-button:hover {
+    color: #ecf5ff;
+    background: #3286e1 !important;
+}
+
+.follow-button:focus {
+    color: #ecf5ff;
+    background: #3286e1 !important;
     /*opacity: 0.5;*/
 }
 </style>

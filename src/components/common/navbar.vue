@@ -1,5 +1,5 @@
 <template>
-    <el-header style="height: 80px;padding-top: 1px">
+    <el-header style="height: 80px;padding-top: 6px">
         <el-row type="flex" class="row-bg">
             <el-col :span="1" style="padding-left: 10px;padding-top: 6px">
                 <!--<el-button type="text" icon="el-icon-s-operation" style="font-size: 20px"></el-button>-->
@@ -15,26 +15,27 @@
                 </el-input>
             </el-col>
 
-            <el-col :span="1" :offset="5" style="padding-top: 3px">
-                <notice></notice>
-            </el-col>
+            <template v-if="show">
+                <el-col :span="1" :offset="5" style="padding-top: 3px">
+                    <notice></notice>
+                </el-col>
 
-            <el-col :span="2" style="padding-top: 3px">
-                <email></email>
-            </el-col>
+                <el-col :span="2" style="padding-top: 3px">
+                    <email></email>
+                </el-col>
 
-            <el-col :span="2" style="padding-top: 10px">
-                <el-button @click="upload" round>投稿</el-button>
-            </el-col>
+                <el-col :span="2" style="padding-top: 10px">
+                    <el-button @click="upload" round>投稿</el-button>
+                </el-col>
 
-            <el-col :span="2">
-                <user></user>
-            </el-col>
-            <!--<el-col :span="2" :offset="9" style="padding-top: 10px">-->
+                <el-col :span="2">
+                    <user></user>
+                </el-col>
+            </template>
+
+            <!--<el-col v-if="$store.state.auth.uid == null" :span="2" :offset="9" style="padding-top: 10px">-->
             <!--    <el-button @click="login" round>登录/注册</el-button>-->
             <!--</el-col>-->
-
-
         </el-row>
     </el-header>
 </template>
@@ -57,7 +58,8 @@ export default {
     },
     data() {
         return {
-            search: null
+            show: false,
+            search: null,
         };
     },
     methods: {
@@ -67,6 +69,30 @@ export default {
         login() {
             this.$router.push("/login")
         },
+    },
+    beforeCreate() {
+        if (this.$store.state.auth.uid == '' || this.$store.state.auth.username == '' || this.$store.state.auth.avatar == '') {
+            console.log("未登录");
+            this.$http.get("auth/user/info")
+                    .then(res => {
+                        if (res.data.code === 0) {
+                            this.$store.commit("auth/SET_UID", res.data.data.uid);
+                            this.$store.commit("auth/SET_USERNAME", res.data.data.username);
+                            this.$store.commit("auth/SET_AVATAR", res.data.data.avatar);
+                            // 防止页面没获取到数据抖动
+                            setTimeout(() => {
+                                this.show = true;
+                            }, 100);
+                        } else {
+                            this.$message.error('登录已过期，请重新登录');
+                            this.$router.push("/login");
+                        }
+                    });
+        } else {
+            setTimeout(() => {
+                this.show = true;
+            }, 8);
+        }
     }
 }
 </script>

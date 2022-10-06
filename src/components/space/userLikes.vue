@@ -17,8 +17,6 @@ export default {
     components: {
         imgCard
     },
-    data() {
-    },
     props: {
         empty: String,
         imgNum: Number

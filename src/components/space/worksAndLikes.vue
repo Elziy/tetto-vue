@@ -20,7 +20,7 @@
             <!--</div>-->
             <user-likes :img-num="likeNum" empty="暂无收藏"></user-likes>
         </el-tab-pane>
-        <el-tab-pane label="历史" name="histories" :lazy="true">
+        <el-tab-pane label="浏览历史" name="histories" :lazy="true">
             <user-likes :imgNum="historyNum" empty="暂无历史"></user-likes>
         </el-tab-pane>
     </el-tabs>

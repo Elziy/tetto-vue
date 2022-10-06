@@ -12,9 +12,9 @@
                     :model="form_login"
                     :rules="loginFormRules"
             >
-                <el-form-item prop="username">
+                <el-form-item prop="email">
                     <el-input placeholder="请输入您的邮箱" prefix-icon="el-icon-user"
-                              v-model="form_login.username"></el-input>
+                              v-model="form_login.email"></el-input>
                 </el-form-item>
                 <el-form-item prop="password">
                     <el-input
@@ -28,7 +28,7 @@
 
                 <el-form-item class="btns">
                     <el-button type="primary" @click="login" round>登录</el-button>
-                    <el-button type="info" @click="zhuce" round>注册</el-button>
+                    <el-button type="info" @click="register" round>注册</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -36,17 +36,17 @@
 </template>
 
 <script>
-import axios from "axios";
+import {mapActions} from "vuex";
 
 export default {
     data() {
         return {
             form_login: {
-                username: "lzy@163.com",
+                email: "lzy@163.com",
                 password: "123456"
             },
             loginFormRules: {
-                username: [
+                email: [
                     {required: true, message: "请输入您的邮箱", trigger: "blur"},
                     {
                         type: 'email',
@@ -62,38 +62,44 @@ export default {
         };
     },
     methods: {
-        zhuce() {
-            this.$router.push("/register")
+        ...mapActions('auth', {Login: 'login'}),
+        register() {
+            this.$router.replace('/register')
         },
         login() {
             // this.$router.push("/home")
             this.$refs.LoginRef.validate(async valid => {
                 if (!valid) return;
-                axios.post("http://192.168.31.243:88/api/auth/user/login", this.form_login)
+                this.$http.post("auth/user/login", this.form_login)
                         .then(response => {
                                     if (response.data.code === 0) {
-                                        let username = response.data.data.usrUsername
+                                        let userInfo = response.data.data;
+                                        let username = userInfo.username
+                                        this.Login(userInfo);
                                         this.$message.success(username + '  登录成功')
-                                        // window.sessionStorage.setItem("token", res.data.token);
-                                        // window.sessionStorage.setItem("username", res.data.username);
-                                        // window.sessionStorage.setItem("user_id", res.data.id);
-                                        this.$router.push("/home")
-                                    } else if (response.data.code === 150003) {
+                                        this.$router.push("/")
+                                    } else if (response.data.code === 401) {
                                         this.$message.error("账号或密码错误！");
                                     } else {
-                                        this.$message.error("网络异常,请稍后重试");
+                                        this.$message.error("服务器异常,请稍后重试");
                                     }
                                 },
                                 error => {
-                                    this.$message({
-                                        message: error.message,
-                                        type: "error"
-                                    });
+                                    this.$message.error('网络异常,请稍后重试');
                                     return false;
                                 }
                         );
             });
+        },
+    },
+    beforeCreate() {
+        if (this.$store.state.auth.uid !== '' && this.$store.state.auth.avatar !== '' && this.$store.state.auth.username !== '' && this.$store.state.auth.token !== '') {
+            this.$router.push('/')
         }
+        this.$store.commit('auth/SET_TOKEN', '');
+        this.$store.commit('auth/SET_UID', '');
+        this.$store.commit('auth/SET_USERNAME', '');
+        this.$store.commit('auth/SET_AVATAR', '');
     }
 };
 </script>

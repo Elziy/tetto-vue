@@ -18,7 +18,9 @@
                 </div>
 
                 <div style="height: 50px">
-                    <el-link href="#" :underline="false" class="enum">
+                    <!--<el-button type="text" class="enum"><i class="el-icon-edit" style="color: black"></i>-->
+                    <!--    <span>插画</span></el-button>-->
+                    <el-link href="http://art.tetto.com" :underline="false" class="enum">
                         <i class="el-icon-edit" style="color: black"></i>
                         <span>插画</span>
                     </el-link>

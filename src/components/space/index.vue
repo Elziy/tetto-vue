@@ -1,9 +1,10 @@
 <template>
-    <div>
+    <div v-if="show">
         <navbar></navbar>
         <!--封面-->
-        <div style="height: 250px;width: 100%;">
-            <img class="userInfo-bg-img" src="@/assets/images/board.png" alt="">
+        <div style="height: 180px;width: 100%">
+            <div class="userInfo-bg-img" style="background: #fafafa"></div>
+            <!--<img class="userInfo-bg-img" src="@/assets/images/board.png" alt="">-->
         </div>
         <el-main>
             <!--用户信息-->
@@ -30,11 +31,16 @@ export default {
     },
     data() {
         return {
-            xl: {
-                span: 3,
-            }
-        }
+            show: false,
+        };
     },
+    beforeCreate() {
+        this.uid = this.$route.params.uid;
+        this.$store.dispatch("space/setUserInfo", this.uid);
+        setTimeout(() => {
+            this.show = true;
+        }, 50);
+    }
 };
 </script>
 
