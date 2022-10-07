@@ -2,10 +2,12 @@ import axios from "axios";
 import store from "@/store";
 import router from '@/router'
 import {Message} from "element-ui";
+import NProgress from "nprogress";
 
 const actions = {
 	// 查询请求用户的空间信息
 	setUserInfo(context, uid) {
+		NProgress.start();
 		axios.get('auth/user/info/' + uid)
 			.then(res => {
 					if (res.data.code === 0) {
@@ -25,6 +27,7 @@ const actions = {
 					router.replace("/404")
 					Message.error('获取用户信息失败');
 				});
+		NProgress.done();
 	}
 }
 const mutations = {

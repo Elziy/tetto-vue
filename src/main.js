@@ -2,6 +2,9 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import './assets/css/global.css'
+import NProgress from 'nprogress' // 引入nprogress插件
+import 'nprogress/nprogress.css'  // 这个nprogress样式必须引入
+NProgress.configure({showSpinner: false});
 
 Vue.config.productionTip = false
 
