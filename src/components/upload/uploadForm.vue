@@ -1,30 +1,16 @@
 <template>
     <div>
-        <el-form ref="form" :model="form" label-width="60px" label-position="top">
-            <el-form-item>
+        <el-form ref="form" :rules="rules" :model="form" label-width="60px" label-position="top">
+            <el-form-item prop="title">
                 <el-input maxlength="32" show-word-limit placeholder="标题" type="text" v-model="form.title"></el-input>
             </el-form-item>
             <!--说明-->
-            <el-form-item>
+            <el-form-item prop="introduce">
                 <el-input :autosize="{ minRows: 3, maxRows: 6}" show-word-limit maxlength="200" placeholder="说明"
                           type="textarea" v-model="form.introduce"></el-input>
             </el-form-item>
 
-            <!--<el-form-item>-->
-            <!--    <el-select style="width: 670px;"-->
-            <!--               v-model="form.tags"-->
-            <!--               multiple-->
-            <!--               maxlength="10"-->
-            <!--               show-word-limit-->
-            <!--               filterable-->
-            <!--               allow-create-->
-            <!--               :clearable="true"-->
-            <!--               :multiple-limit="10"-->
-            <!--               placeholder="请输入标签">-->
-            <!--    </el-select>-->
-            <!--</el-form-item>-->
-
-            <el-form-item>
+            <el-form-item prop="tags">
                 <div>
                     <el-tag
                             :key="tag"
@@ -75,13 +61,32 @@ export default {
                 isPublic: 1
             },
             inputVisible: false,
-            inputValue: ''
+            inputValue: '',
+            rules: {
+                title: [
+                    {required: true, message: '请输入标题', trigger: 'blur'},
+                    {min: 1, max: 32, message: '长度在 1 到 32 个字符', trigger: 'blur'}
+                ],
+                introduce: [
+                    {required: true, message: '请输入说明', trigger: 'blur'},
+                    {min: 1, max: 200, message: '长度在 1 到 200 个字符', trigger: 'blur'}
+                ],
+                tags: [
+                    {required: true, message: '请添加标签', trigger: 'blur'},
+                ],
+            }
         };
     },
     methods: {
         onSubmit() {
-            this.$message.success('投稿');
-            this.$bus.$emit('tougao', this.form)
+            this.$refs['form'].validate((valid) => {
+                if (valid) {
+                    this.$bus.$emit('submit', this.form)
+                } else {
+                    this.$message.error('请检查输入')
+                    return false;
+                }
+            });
         },
 
         handleClose(tag) {

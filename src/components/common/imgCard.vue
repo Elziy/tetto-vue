@@ -4,12 +4,14 @@
             <a href="#"><img :src="i" class="main-image" alt="img"></a>
         </div>
         <div style="height: 22px;">
-            <el-button type="text"><span style="color: black">title</span></el-button>
+            <el-button type="text"><span style="color: black">{{ title }}</span></el-button>
         </div>
         <div>
             <img :src="i" style="" class="face-avatar-image" alt="img">
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <el-button type="text" @click="imgDetail"><span style="color: black">userName</span></el-button>
+            <el-button type="text" @click="userSpace">
+                <span style="color: black">{{ userName }}</span>
+            </el-button>
         </div>
     </div>
 </template>
@@ -22,12 +24,13 @@ export default {
     data() {
         return {
             i,
-            currentDate: new Date().getDate()
-        }
+            title: "title",
+            userName: "userName"
+        };
     },
     methods: {
-        imgDetail() {
-            this.$message.success("success");
+        userSpace() {
+            this.$message.success("用户空间");
         },
     }
 }

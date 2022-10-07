@@ -53,12 +53,11 @@ export default {
             showUpload: false, //控制limit最大值之后 关闭上传按钮
             dialogVisible: false, //查看图片弹出框
             imgUrls: [], //上传图片后地址合集
-            tempUrls: [],
             url: null,
             newThumbnailUrl: null,
             thumbnailUrl: null,
             form: {
-                name: null,
+                title: null,
                 introduce: null,
                 tags: [],
                 isPublic: 1
@@ -78,9 +77,6 @@ export default {
                 this.newThumbnailUrl = file.response.url;
             }
             this.dialogVisible = true;
-        },
-        submitUpload() {
-            this.$refs.upload.submit();
         },
         beforeUpload(file) {
             const size = file.size / 1024 / 1024;
@@ -132,11 +128,32 @@ export default {
         },
     },
     mounted() {
-        this.$bus.$on('tougao', (form) => {
+        this.$bus.$on('submit', (form) => {
             this.form = form
-            console.log(form);
-            console.log(this.imgUrls);
-            console.log(this.thumbnailUrl);
+            if (this.imgUrls.length === 0) {
+                this.$message.error("请上传作品");
+                return false;
+            } else if (this.thumbnailUrl === null) {
+                this.$message.error("请设置缩略图");
+                return false;
+            }
+            this.$http.post('image/atlas/upload', {
+                title: this.form.title,
+                introduce: this.form.introduce,
+                tags: this.form.tags,
+                isPublic: this.form.isPublic,
+                imgUrls: this.imgUrls,
+                thumbnailUrl: this.thumbnailUrl
+            }).then(res => {
+                if (res.data.code === 0) {
+                    this.$message.success("上传成功");
+                    window.location.href = '/space/' + this.$store.state.auth.uid;
+                } else {
+                    this.$message.error("上传失败,请稍后重试");
+                }
+            }).catch(err => {
+                this.$message.error("上传失败,请稍后重试");
+            })
         });
     }
 };
