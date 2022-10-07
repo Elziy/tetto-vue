@@ -42,6 +42,8 @@
 </template>
 
 <script>
+import NProgress from "nprogress";
+
 export default {
     name: "userInfoChangeForm",
     data() {
@@ -91,6 +93,7 @@ export default {
         onSubmit() {
             this.$refs['form'].validate((valid) => {
                 if (valid) {
+                    NProgress.start();
                     this.$http.post('auth/user/update', this.form).then(res => {
                                 if (res.data.code === 0) {
                                     this.$store.dispatch('space/setUserInfo', this.$store.state.auth.uid);
@@ -104,6 +107,7 @@ export default {
                             error => {
                                 this.$message.error('修改失败');
                             });
+                    NProgress.done();
                 } else {
                     this.$message({
                         message: '请检查输入',

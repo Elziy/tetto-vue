@@ -24,8 +24,8 @@ import axios from 'axios'
 // 配置请求的根路径
 axios.defaults.baseURL = 'http://art.tetto.com/api/'
 
-axios.defaults.headers.post['Content-Type'] =
-	'application/x-www-form-urlencoded'
+// axios.defaults.headers.post['Content-Type'] =
+// 	'application/x-www-form-urlencoded'
 
 // axios.interceptors.request.use(
 // 	function (config) {

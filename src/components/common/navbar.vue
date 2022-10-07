@@ -20,15 +20,15 @@
                     <notice></notice>
                 </el-col>
 
-                <el-col :span="2" style="padding-top: 3px">
+                <el-col :span="1" style="padding-top: 3px">
                     <email></email>
                 </el-col>
 
-                <el-col :span="2" style="padding-top: 10px">
+                <el-col :span="2" style="padding-top: 10px;padding-left: 20px">
                     <el-button @click="upload" round>投稿</el-button>
                 </el-col>
 
-                <el-col :span="2">
+                <el-col :span="2" style="padding-left: 25px">
                     <user></user>
                 </el-col>
             </template>

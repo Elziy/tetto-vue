@@ -18,8 +18,17 @@
             </el-button>
         </div>
         <div v-if="$store.state.space.self === false" style="text-align: center;padding-top: 5px">
-            <el-button round class="follow-button" style="background: #559eff" @click="follow">
-                <span style="font-weight: bold">+关注</span>
+            <el-button v-if="this.$store.state.space.userInfo.isFollow" round class="follow-button" @click="isFollow">
+                    <span style="font-weight: bold">
+                        <i class="el-icon-check"></i>
+                        已关注
+                    </span>
+            </el-button>
+            <el-button v-else round class="follow-button" @click="toFollowing">
+                    <span style="font-weight: bold">
+                        <i class="el-icon-plus"></i>
+                        关注
+                    </span>
             </el-button>
         </div>
         <div v-if="userInfo.introduce" style="text-align: center">
@@ -56,6 +65,7 @@
 
 <script>
 import {mapState} from "vuex";
+import axios from "axios";
 
 export default {
     name: "userInfoDialog",
@@ -83,11 +93,38 @@ export default {
                 this.$emit('changeInfo')
             }, 300)
         },
-        follow() {
-            this.$message({
-                message: '关注成功',
-                type: 'success'
-            });
+        toFollowing() {
+            let fid = this.$store.state.space.userInfo.uid
+            axios.get("auth/user/follow/" + fid,)
+                    .then(res => {
+                        if (res.data.code === 0) {
+                            this.$message.success("关注成功")
+                            this.$store.state.space.userInfo.followers += 1
+                            this.$store.state.space.userInfo.isFollow = true
+                        } else {
+                            this.$message.error(res.data.message)
+                        }
+                    }, err => {
+                        this.$message.error(err)
+                    })
+        },
+        isFollow() {
+            this.$confirm('确认取关   ' + this.$store.state.space.userInfo.username + '  吗？')
+                    .then(() => {
+                        let fid = this.$store.state.space.userInfo.uid
+                        axios.get("auth/user/unfollow/" + fid,)
+                                .then(res => {
+                                    if (res.data.code === 0) {
+                                        this.$message.success("取关成功")
+                                        this.$store.state.space.userInfo.followers -= 1
+                                        this.$store.state.space.userInfo.isFollow = false
+                                    } else {
+                                        this.$message.error(res.data.message)
+                                    }
+                                }, err => {
+                                    this.$message.error(err)
+                                })
+                    })
         }
     },
 };

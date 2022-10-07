@@ -23,8 +23,8 @@
                             </el-link>
                         </el-col>
                         <el-col :span="8">
-                            <el-link :underline="false" class="follow" @click="follows">
-                                粉丝 <span class="follow-span">{{ $store.state.space.userInfo.follows || 0 }}</span>
+                            <el-link :underline="false" class="follow" @click="followers">
+                                粉丝 <span class="follow-span">{{ $store.state.space.userInfo.followers || 0 }}</span>
                             </el-link>
                         </el-col>
                     </el-row>
@@ -32,7 +32,9 @@
                 <div v-if="this.$store.state.space.userInfo.introduce" style="padding-top: 10px">
                     <span style="font-size: 14px;color: #606266">个人介绍</span>
                     <el-divider direction="vertical"></el-divider>
-                    <span style="font-size: 14px;color: #606266">{{ this.$store.state.space.userInfo.introduce | introduce }}</span>
+                    <span style="font-size: 14px;color: #606266">{{
+                            this.$store.state.space.userInfo.introduce | introduce
+                        }}</span>
                 </div>
                 <div style="padding-top: 10px">
                     <el-link :underline="false" class="follow" @click="userInfo">
@@ -47,8 +49,19 @@
             </el-col>
 
             <el-col v-if="$store.state.space.self === false" :span="6" :offset="7" style="padding-top: 40px">
-                <el-button round class="info-change-button" @click="toFollowing">
-                    <span style="font-weight: bold">+关注</span>
+                <el-button v-if="this.$store.state.space.userInfo.isFollow" round class="follow-button"
+                           @click="isFollow">
+                    <span style="font-weight: bold">
+                        <i class="el-icon-check"></i>
+                        <!--<i class="el-icon-loading"></i>-->
+                        已关注
+                    </span>
+                </el-button>
+                <el-button v-else round class="follow-button" @click="toFollowing">
+                    <span style="font-weight: bold">
+                        <i class="el-icon-plus"></i>
+                        关注
+                    </span>
                 </el-button>
             </el-col>
 
@@ -69,6 +82,7 @@
 <script>
 import userInfoDialog from "@/components/space/userInfoDialog";
 import userInfoChangeDialog from "@/components/space/userInfoChangeDialog";
+import axios from "axios";
 
 export default {
     name: "userInfo",
@@ -86,7 +100,7 @@ export default {
         following() {
             this.$message.success("关注")
         },
-        follows() {
+        followers() {
             this.$message.success("粉丝")
         },
         userInfo() {
@@ -98,7 +112,37 @@ export default {
             this.$refs["change-dialog"].dialog = this.infoChangeDialog
         },
         toFollowing() {
-            this.$message.success("+关注")
+            let fid = this.$store.state.space.userInfo.uid
+            axios.get("auth/user/follow/" + fid,)
+                    .then(res => {
+                        if (res.data.code === 0) {
+                            this.$message.success("关注成功")
+                            this.$store.state.space.userInfo.followers += 1
+                            this.$store.state.space.userInfo.isFollow = true
+                        } else {
+                            this.$message.error(res.data.message)
+                        }
+                    }, err => {
+                        this.$message.error(err)
+                    })
+        },
+        isFollow() {
+            this.$confirm('确认取关   ' + this.$store.state.space.userInfo.username + '  吗？')
+                    .then(() => {
+                        let fid = this.$store.state.space.userInfo.uid
+                        axios.get("auth/user/unfollow/" + fid,)
+                                .then(res => {
+                                    if (res.data.code === 0) {
+                                        this.$message.success("取关成功")
+                                        this.$store.state.space.userInfo.followers -= 1
+                                        this.$store.state.space.userInfo.isFollow = false
+                                    } else {
+                                        this.$message.error(res.data.message)
+                                    }
+                                }, err => {
+                                    this.$message.error(err)
+                                })
+                    })
         }
     }
 }

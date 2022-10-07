@@ -11,7 +11,7 @@ export default {
     name: "notice",
     data() {
         return {
-            sum: 10
+            sum: 2
         };
     },
 }

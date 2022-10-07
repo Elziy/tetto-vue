@@ -13,7 +13,7 @@ export default {
     name: "email",
     data() {
         return {
-            sum: 10000
+            sum: 5
         };
     },
 }
