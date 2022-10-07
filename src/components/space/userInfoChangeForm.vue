@@ -36,7 +36,7 @@
         </el-form-item>
 
         <el-form-item style="text-align: center">
-            <el-button type="primary" @click="onSubmit">保存修改</el-button>
+            <el-button :disabled="disable" type="primary" @click="onSubmit">保存修改</el-button>
         </el-form-item>
     </el-form>
 </template>
@@ -66,6 +66,7 @@ export default {
             }
         };
         return {
+            disable: false,
             form: {
                 id: this.$store.state.auth.uid,
                 username: this.$store.state.space.userInfo.username,
@@ -100,6 +101,7 @@ export default {
                                     this.$store.commit('auth/SET_UID', this.form.id);
                                     this.$store.commit('auth/SET_USERNAME', this.form.username);
                                     this.$message.success('修改成功');
+                                    this.disable = true;
                                 } else {
                                     this.$message.error('修改失败');
                                 }

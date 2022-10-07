@@ -64,7 +64,7 @@ export default {
     },
     methods: {
         upload() {
-            this.$router.push("/upload")
+            window.location.href = "/upload";
         },
         login() {
             this.$router.push("/login")

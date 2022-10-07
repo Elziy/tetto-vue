@@ -26,12 +26,12 @@
                     top="60px">
                 <img height="350px;" style="object-fit: cover;width: auto;" :src="url" alt/>
                 <span slot="footer" class="dialog-footer" style="text-align: end">
-                      <el-button class="th-button" round @click="setTh(newThumbnailUrl)">设置为缩略图</el-button>
+                      <el-button class="th-button" round @click="setTh(newThumbnailFile)">设置为缩略图</el-button>
                 </span>
             </el-dialog>
         </div>
         <div style="padding-top: 20px">
-            <thumbnail :img-url="thumbnailUrl"></thumbnail>
+            <thumbnail></thumbnail>
         </div>
     </div>
 </template>
@@ -52,10 +52,10 @@ export default {
         return {
             showUpload: false, //控制limit最大值之后 关闭上传按钮
             dialogVisible: false, //查看图片弹出框
+            fileList: [], //上传的文件列表
             imgUrls: [], //上传图片后地址合集
             url: null,
-            newThumbnailUrl: null,
-            thumbnailUrl: null,
+            newThumbnailFile: null,
             form: {
                 title: null,
                 introduce: null,
@@ -73,9 +73,11 @@ export default {
         //点击文件列表中已上传的文件时的函数
         handlePictureCardPreview(file) {
             this.url = file.url;
-            if (typeof (file.response) !== "undefined") {
-                this.newThumbnailUrl = file.response.url;
-            }
+            this.newThumbnailFile = file;
+            // if (typeof (file.response) !== "undefined") {
+            //     this.$store.state.upload.thumbnailUrl = file.response.url;
+            //     this.$store.state.upload.thumbnailFile = file;
+            // }
             this.dialogVisible = true;
         },
         beforeUpload(file) {
@@ -92,6 +94,7 @@ export default {
         success(response, file, fileList) {
             if (response.code === 200) {
                 this.imgUrls.push(response.url);
+                this.fileList = fileList;
                 this.$message.success(file.name + " 上传成功");
             } else {
                 this.$message.error(file.name + " 上传失败，请重新上传");
@@ -108,11 +111,12 @@ export default {
         error(err, file, fileList) {
             this.$message.error("文件上传失败,请稍后重试")
         },
-        // 设置缩略图
-        setTh(newThumbnailUrl) {
-            if (newThumbnailUrl !== null) {
-                this.thumbnailUrl = newThumbnailUrl;
-                this.$message.success("设置成功");
+        setTh(file) {
+            if (file !== null) {
+                console.log(file);
+                this.$store.state.upload.thumbnailUrl = file.response.url;
+                this.$store.state.upload.thumbnailFile = file;
+                this.$message.success("设置成功,如果不是不是1:1比例的图片请手动裁剪");
             } else {
                 this.$message.error("设置失败");
             }
@@ -124,7 +128,8 @@ export default {
     },
     watch: {
         imgUrls(n) {
-            this.thumbnailUrl = n.at(0)
+            this.$store.state.upload.thumbnailUrl = n[0];
+            this.$store.state.upload.thumbnailFile = this.fileList[0];
         },
     },
     mounted() {
@@ -133,7 +138,7 @@ export default {
             if (this.imgUrls.length === 0) {
                 this.$message.error("请上传作品");
                 return false;
-            } else if (this.thumbnailUrl === null) {
+            } else if (this.$store.state.upload.thumbnailUrl === null) {
                 this.$message.error("请设置缩略图");
                 return false;
             }
@@ -143,7 +148,7 @@ export default {
                 tags: this.form.tags,
                 isPublic: this.form.isPublic,
                 imgUrls: this.imgUrls,
-                thumbnailUrl: this.thumbnailUrl
+                thumbnailUrl: this.$store.state.upload.thumbnailUrl
             }).then(res => {
                 if (res.data.code === 0) {
                     this.$message.success("上传成功");

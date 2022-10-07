@@ -21,6 +21,9 @@ export default {
         empty: String,
         imgNum: Number
     },
+    beforeCreate() {
+        console.log('like')
+    }
 }
 </script>
 

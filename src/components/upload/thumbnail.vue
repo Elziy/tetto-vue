@@ -1,38 +1,40 @@
 <template>
-    <div v-if="imgUrl" class="thumbnail">
+    <div v-if="this.$store.state.upload.thumbnailUrl" class="thumbnail">
         <el-row align="middle">
-            <el-col :span="10" style="padding-top: 5px">
+            <el-col :span="8" style="padding-top: 5px">
                 <div>
-                    <img class="thumbnail-img" :src="imgUrl" alt="">
+                    <img class="thumbnail-img" :src="this.$store.state.upload.thumbnailUrl" alt="">
                 </div>
             </el-col>
-            <el-col :span="10" style="padding-top: 25px">
-                <div>
-                    <span>作品封面</span>
-                </div>
-                <div>
-                    <span style="font-size: 12px">(请尽量选择1:1图片)</span>
-                </div>
+            <el-col :span="6" style="padding-top: 40px">
+                <span>作品缩略图</span>
+            </el-col>
+            <el-col :span="10" style="padding-top: 35px">
+                <el-button size="mini" round @click="cropper">手动裁剪</el-button>
             </el-col>
         </el-row>
+        <thumbnail-cropper></thumbnail-cropper>
     </div>
 </template>
 
 <script>
+import ThumbnailCropper from "./thumbnailCropper";
 // 缩略图
 export default {
     name: "thumbnail",
-    props: {
-        imgUrl: {
-            type: String,
-            default: null
-        }
+    components: {
+        ThumbnailCropper
     },
-    // watch: {
-    //     imgUrl(url){
-    //         return url
-    //     }
-    // },
+    methods: {
+        cropper() {
+            let reader = new FileReader()
+            reader.readAsDataURL(this.$store.state.upload.thumbnailFile.raw)
+            reader.onload = e => {
+                this.$store.state.upload.cropperImage = e.target.result // base64
+            }
+            this.$store.state.upload.thumbnailCropperDialog = true
+        },
+    }
 }
 </script>
 
@@ -48,6 +50,6 @@ export default {
     width: 80px;
     height: 80px;
     border-radius: 15%;
-    object-fit: cover;
+    /*object-fit: cover;*/
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+    <el-tabs v-model="activeName" type="card">
         <el-tab-pane label="作品" name="works" :lazy="true">
             <user-works></user-works>
         </el-tab-pane>
@@ -43,11 +43,6 @@ export default {
             historyNum: 20,
         };
     },
-    methods: {
-        handleClick(tab, event) {
-            this.$message.success(tab + event)
-        }
-    }
 }
 </script>
 

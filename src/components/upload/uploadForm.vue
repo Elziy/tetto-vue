@@ -42,7 +42,7 @@
             </el-form-item>
 
             <el-form-item style="text-align: center">
-                <el-button round style="width: 200px;" @click="onSubmit">投 稿</el-button>
+                <el-button :disabled="disabled" round style="width: 200px;" @click="onSubmit">投 稿</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -54,6 +54,7 @@ export default {
     name: "uploadForm",
     data() {
         return {
+            disabled: false,
             form: {
                 title: null,
                 introduce: null,
@@ -82,6 +83,10 @@ export default {
             this.$refs['form'].validate((valid) => {
                 if (valid) {
                     this.$bus.$emit('submit', this.form)
+                    this.disabled = true
+                    setTimeout(() => {
+                        this.disabled = false
+                    }, 2000)
                 } else {
                     this.$message.error('请检查输入')
                     return false;
