@@ -39,7 +39,7 @@ export default {
         this.$store.dispatch("space/setUserInfo", this.uid);
         setTimeout(() => {
             this.show = true;
-        }, 10);
+        }, 20);
     }
 };
 </script>

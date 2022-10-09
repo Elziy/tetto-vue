@@ -1,13 +1,13 @@
 <template>
     <div>
         <navbar></navbar>
-        <el-main class="container">
+        <div class="container">
             <!--标签分类-->
             <tags></tags>
             <br>
             <!--推荐作品-->
             <recommended-works></recommended-works>
-        </el-main>
+        </div>
         <el-footer>
         </el-footer>
     </div>

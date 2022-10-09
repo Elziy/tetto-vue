@@ -65,9 +65,36 @@ export default {
         };
     },
     methods: {
+        change(file, fileList) {
+            let reader = new FileReader()
+            reader.readAsDataURL(file.raw)
+            reader.onload = e => {
+                let img = e.target.result;
+                let image = new Image()
+                image.src = img
+
+                image.onload = _ => {
+                    this.width = image.width
+                    this.height = image.height
+                }
+            }
+        },
         handleRemove(file, fileList) {
             if (typeof (file.response) !== "undefined") {
-                this.imgUrls.splice(this.imgUrls.indexOf(file.response.url), 1);
+                // 删除数组中特定的元素
+                this.imgUrls = this.imgUrls.filter((item, index) => {
+                    return item.url !== file.response.url
+                });
+            }
+            // 如果删除的是缩略图对应的作品
+            if (file === this.$store.state.upload.thumbnailFile) {
+                if (fileList.length > 0) {
+                    this.$store.state.upload.thumbnailFile = fileList[0]
+                    this.$store.state.upload.thumbnailUrl = fileList[0].response.url
+                } else {
+                    this.$store.state.upload.thumbnailFile = null
+                    this.$store.state.upload.thumbnailUrl = null
+                }
             }
         },
         //点击文件列表中已上传的文件时的函数
@@ -93,9 +120,32 @@ export default {
         // 上传成功
         success(response, file, fileList) {
             if (response.code === 200) {
-                this.imgUrls.push(response.url);
-                this.fileList = fileList;
-                this.$message.success(file.name + " 上传成功");
+                // 设置缩略图
+                if (this.$store.state.upload.thumbnailUrl === null) {
+                    this.$store.state.upload.thumbnailUrl = response.url;
+                    this.$store.state.upload.thumbnailFile = file;
+                }
+                let reader = new FileReader()
+                reader.readAsDataURL(file.raw)
+                reader.onload = e => {
+                    let img = e.target.result;
+                    let image = new Image()
+                    image.src = img
+
+                    image.onload = _ => {
+                        let width = image.width
+                        let height = image.height
+                        let imgUrl = {
+                            url: response.url,
+                            width,
+                            height
+                        };
+                        console.log(imgUrl)
+                        this.imgUrls.push(imgUrl);
+                        this.fileList = fileList;
+                        this.$message.success(file.name + " 上传成功");
+                    }
+                }
             } else {
                 this.$message.error(file.name + " 上传失败，请重新上传");
                 let index = 0;
@@ -125,13 +175,34 @@ export default {
         handleExceed(files, fileList) {
             this.$message.warning(`最多只允许上传${this.limit}张图片`);
         },
+        //获取图片宽高
+        getWH(file) {
+            let reader = new FileReader()
+            reader.readAsDataURL(file.raw)
+            reader.onload = e => {
+                let img = e.target.result;
+                let image = new Image()
+                image.src = img
+
+                image.onload = _ => {
+                    this.width = image.width
+                    this.height = image.height
+                }
+            }
+        }
     },
-    watch: {
-        imgUrls(n) {
-            this.$store.state.upload.thumbnailUrl = n[0];
-            this.$store.state.upload.thumbnailFile = this.fileList[0];
-        },
-    },
+    // watch: {
+    //     imgUrls(imgUrl) {
+    //         if (imgUrl.length > 0) {
+    //             this.$store.state.upload.thumbnailUrl = imgUrl[0].url;
+    //             this.$store.state.upload.thumbnailFile = this.fileList[0];
+    //         } else {
+    //             this.$store.state.upload.thumbnailUrl = null;
+    //             this.$store.state.upload.thumbnailFile = null;
+    //         }
+    //
+    //     },
+    // },
     mounted() {
         this.$bus.$on('submit', (form) => {
             this.form = form

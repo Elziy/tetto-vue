@@ -2,7 +2,8 @@
     <div>
         <div>
             <el-link :underline="false" type="text" @click="imgDetail">
-                <img :src="imgUrl" class="main-image" alt="img">
+                <el-image :src="imgUrl" class="main-image"></el-image>
+                <!--<img :src="imgUrl" class="main-image" alt="img">-->
             </el-link>
         </div>
         <div style="height: 22px;">
@@ -19,11 +20,12 @@ export default {
     name: "userWorksCard",
     props: {
         title: String,
-        imgUrl: null
+        imgUrl: null,
+        aid: Number,
     },
     methods: {
         imgDetail() {
-            this.$message.success("success");
+            window.location.href = "/artworks/" + this.aid;
         },
     }
 }
@@ -49,6 +51,7 @@ el-link:hover {
 
 /*鼠标放在图片上高亮*/
 .main-image:hover {
-    border: 1px solid #409EFF;
+    /*border: 1px solid #409EFF;*/
+    opacity: 0.9;
 }
 </style>

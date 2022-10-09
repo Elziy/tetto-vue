@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import auth from "./modules/auth";
 import space from "./modules/space";
 import upload from "@/store/modules/upload";
+import artwork from "@/store/modules/artwork";
 import defaultStore from "@/store/modules/defaultStore";
 
 Vue.use(Vuex)	// 应用Vuex插件
@@ -13,6 +14,7 @@ export default new Vuex.Store({
 		auth,
 		space,
 		upload,
+		artwork,
 		defaultStore
 	}
 })

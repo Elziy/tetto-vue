@@ -33,7 +33,7 @@
                     <span style="font-size: 14px;color: #606266">个人介绍</span>
                     <el-divider direction="vertical"></el-divider>
                     <span style="font-size: 14px;color: #606266">{{
-                            this.$store.state.space.userInfo.introduce | introduce
+                            $store.state.space.userInfo.introduce | introduce
                         }}</span>
                 </div>
                 <div style="padding-top: 10px">
@@ -189,7 +189,7 @@ export default {
 .follow-button {
     width: 120px;
     color: #ecf5ff;
-    background: #559eff !important;
+    background: #3996fb !important;
 }
 
 .follow-button:hover {

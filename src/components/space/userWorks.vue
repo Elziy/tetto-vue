@@ -5,6 +5,7 @@
                 <user-works-card
                         :title="work.title"
                         :imgUrl="work.thumbnailUrl"
+                        :aid="work.id"
                 ></user-works-card>
             </li>
         </ul>

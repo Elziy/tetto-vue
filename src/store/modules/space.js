@@ -16,10 +16,11 @@ const actions = {
 							store.state.space.self = true;
 						}
 						store.commit('space/SET_USER_INFO', res.data.data);
+						document.title = res.data.data.username + '的空间';
 					} else if (res.data.code === 401) {
 						router.push("/login");
 					} else {
-						console.log(111)
+						Message.error('暂无该用户');
 						router.replace("/404")
 					}
 				},

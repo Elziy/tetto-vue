@@ -41,6 +41,11 @@ const routes = [{
 	meta: {title: "投稿", isAuth: true},
 	component: () => import('@/components/upload/index')
 }, {
+	path: '/artworks/:aid',
+	name: 'artworks',
+	meta: {title: "作品详情", isAuth: true},
+	component: () => import('@/components/artwork/artworks')
+}, {
 	path: '*',
 	redirect: '/404',
 }];

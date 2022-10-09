@@ -1,15 +1,15 @@
 <template>
     <div>
         <navbar></navbar>
-        <el-main class="container">
+        <div>
             <div style="text-align: center">
                 <upload ref="upload" :limit="10"></upload>
             </div>
             <hr>
-            <div class="container" style="width: 700px;">
+            <div class="container" style="width: 1000px;">
                 <upload-form></upload-form>
             </div>
-        </el-main>
+        </div>
     </div>
 </template>
 
