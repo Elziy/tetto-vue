@@ -33,7 +33,6 @@
                                                         :src="item.imgUrl"
                                                         :style="item.width > item.height ? 'border-radius: 1%;width: 944px;' : 'border-radius: 1%;height: 700px;weight: auto'"
                                                         :preview-src-list="list"
-                                                        lazy
                                                 >
                                                 </el-image>
 
@@ -57,8 +56,7 @@
                                                 <div style="position: relative;margin-right: 10px;">
                                                     <button type="button"
                                                             style="display: block;box-sizing: content-box;padding: 0;color: inherit;background: none;border: none;line-height: 1;height: 32px;cursor: pointer;">
-                                                        <svg viewBox="0 0 32 32" width="32" height="32"
-                                                             class="sc-11csm01-0 fidkxa">
+                                                        <svg viewBox="0 0 32 32" width="32" height="32">
                                                             <path d="M17,9.91842728 L17,18.0042137 C17,18.5564985 16.5522847,19.0042137 16,19.0042137
 C15.4477153,19.0042137 15,18.5564985 15,18.0042137 L15,9.91842728 L11.7071068,13.2113205
 C11.3165825,13.6018448 10.6834175,13.6018448 10.2928932,13.2113205
@@ -75,17 +73,17 @@ C23,16.4477153 23.4477153,16 24,16 C24.5522847,16 25,16.4477153 25,17 Z" transfo
                                                 <div style="display: flex;position: relative;margin-right: 13px;">
                                                     <button type="button"
                                                             style="display: block;box-sizing: content-box;padding: 0;color: inherit;background: none;border: none;line-height: 1;height: 32px;cursor: pointer;">
-                                                        <svg viewBox="0 0 32 32" width="32" height="32"
-                                                             class="sc-j89e3c-1 jDqMvJ">
+                                                        <svg :style="svg"
+                                                             viewBox="0 0 32 32" width="32" height="32"
+                                                             class="sc-j89e3c-1 bXjFLc">
                                                             <defs>
                                                                 <mask id="uid-mask-1">
                                                                     <rect x="0" y="0" width="32" height="32"
                                                                           fill="white"></rect>
-                                                                    <path d="M16,11.3317089 C15.0857201,9.28334665 13.0491506,7.5 11,7.5
+                                                                    <path :style="path" d="M16,11.3317089 C15.0857201,9.28334665 13.0491506,7.5 11,7.5
 C8.23857625,7.5 6,9.73857647 6,12.5 C6,17.4386065 9.2519779,21.7268174 15.7559337,25.3646328
 C15.9076021,25.4494645 16.092439,25.4494644 16.2441073,25.3646326 C22.7480325,21.7268037 26,17.4385986 26,12.5
-C26,9.73857625 23.7614237,7.5 21,7.5 C18.9508494,7.5 16.9142799,9.28334665 16,11.3317089 Z"
-                                                                          class="sc-j89e3c-0 dUurgf"></path>
+C26,9.73857625 23.7614237,7.5 21,7.5 C18.9508494,7.5 16.9142799,9.28334665 16,11.3317089 Z"></path>
                                                                 </mask>
                                                             </defs>
                                                             <g mask="url(#uid-mask-1)">
@@ -227,9 +225,18 @@ export default {
     },
     data() {
         return {
+            like: false,
             show: false,
             list: [],
         }
+    },
+    computed: {
+        svg() {
+            return this.like ? 'color: #ff4060;fill: currentcolor;' : ''
+        },
+        path() {
+            return this.like ? 'fill: white;' : ''
+        },
     },
     methods: {
         toFollowing() {
@@ -299,4 +306,13 @@ export default {
     background: #3286e1 !important;
     /*opacity: 0.5;*/
 }
+
+/*.bXjFLc {*/
+/*    color: #ff4060;*/
+/*    fill: currentcolor;*/
+/*}*/
+
+/*.bXjFLc mask .sc-j89e3c-0 {*/
+/*    fill: white;*/
+/*}*/
 </style>

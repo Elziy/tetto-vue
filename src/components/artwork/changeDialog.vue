@@ -72,6 +72,9 @@ export default {
                             this.$store.commit('artwork/changeAtlasInfo', this.form);
                             this.$message.success('修改成功');
                             this.disabled = true;
+                            setTimeout(() => {
+                                this.disabled = false;
+                            }, 2000);
                             this.closeLog()
                         } else {
                             this.$message({
