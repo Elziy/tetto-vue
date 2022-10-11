@@ -47,7 +47,7 @@ export default {
 
 <style scoped>
 ul {
-    padding: 20px 0 0 65px;
+    padding: 20px 0 0 80px;
     /*padding: 20px;*/
     display: flex;
     flex-wrap: wrap;

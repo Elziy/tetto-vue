@@ -123,6 +123,10 @@ C26,9.73857625 23.7614237,7.5 21,7.5 C18.9508494,7.5 16.9142799,9.28334665 16,11
                                                         </li>
                                                     </ul>
                                                 </footer>
+                                                <!--投稿时间-->
+                                                <div title="投稿时间" style="font-size: 12px;line-height: 1;">投稿于
+                                                    {{ $store.state.artwork.atlas.date }}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -155,6 +159,7 @@ C26,9.73857625 23.7614237,7.5 21,7.5 C18.9508494,7.5 16.9142799,9.28334665 16,11
                                                         编辑作品
                                                     </span>
                                         </el-button>
+                                        <change-dialog></change-dialog>
                                     </div>
 
                                     <div v-else>
@@ -209,16 +214,16 @@ C26,9.73857625 23.7614237,7.5 21,7.5 C18.9508494,7.5 16.9142799,9.28334665 16,11
 
 <script>
 import navbar from "@/components/common/navbar";
-import showMain from "@/components/artwork/showMain";
-import userInfo from "@/components/artwork/userInfo";
+import changeDialog from "@/components/artwork/changeDialog";
 import axios from "axios";
+import ChangeDialog from "@/components/artwork/changeDialog";
 
 export default {
     name: "artworks",
     components: {
+        ChangeDialog,
         navbar,
-        showMain,
-        userInfo
+        changeDialog
     },
     data() {
         return {
@@ -261,7 +266,7 @@ export default {
                     })
         },
         edit() {
-
+            this.$store.state.artwork.dialog = true
         }
     },
     beforeCreate() {
@@ -273,7 +278,6 @@ export default {
             })
             this.show = true;
         }, 60);
-        console.log(1920 > 1080 ? 'width: 911px;height: auto' : 'width: auto;height: 700px')
     }
 }
 </script>

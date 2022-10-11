@@ -41,7 +41,7 @@
         <div>
             <el-divider><span style="color: #858585">详细信息</span></el-divider>
 
-            <div style="padding-left: 180px">
+            <div style="padding-left: 300px">
                 <el-descriptions :column="1">
                     <!--<el-descriptions-item v-if="userInfo.introduce != null" label="自我介绍">{{ userInfo.introduce }}-->
                     <!--</el-descriptions-item>-->

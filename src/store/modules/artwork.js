@@ -30,9 +30,19 @@ const actions = {
 				Message.error(err)
 			})
 		NProgress.done();
-	}
+	},
 }
-const mutations = {}
+const mutations = {
+	closeDialog(state) {
+		state.dialog = false;
+	},
+	
+	changeAtlasInfo(state, data) {
+		state.atlas.title = data.title;
+		state.atlas.description = data.description;
+		state.atlas.isPublic = data.isPublic;
+	}
+};
 const state = {
 	// 是否是自己的作品
 	self: false,
@@ -48,6 +58,8 @@ const state = {
 	aid: null,
 	// 最新作品集
 	latestAtlas: [],
+	// 修改对话框
+	dialog: false,
 };
 
 export default {
