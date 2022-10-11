@@ -71,7 +71,7 @@ C23,16.4477153 23.4477153,16 24,16 C24.5522847,16 25,16.4477153 25,17 Z" transfo
                                                     </button>
                                                 </div>
                                                 <div style="display: flex;position: relative;margin-right: 13px;">
-                                                    <button type="button"
+                                                    <button type="button" @click="addOrCancelLike"
                                                             style="display: block;box-sizing: content-box;padding: 0;color: inherit;background: none;border: none;line-height: 1;height: 32px;cursor: pointer;">
                                                         <svg :style="svg"
                                                              viewBox="0 0 32 32" width="32" height="32"
@@ -215,6 +215,7 @@ import navbar from "@/components/common/navbar";
 import changeDialog from "@/components/artwork/changeDialog";
 import axios from "axios";
 import ChangeDialog from "@/components/artwork/changeDialog";
+import {mapState} from "vuex";
 
 export default {
     name: "artworks",
@@ -225,12 +226,13 @@ export default {
     },
     data() {
         return {
-            like: false,
             show: false,
             list: [],
         }
     },
     computed: {
+        ...mapState('artwork', {like: 'like'}),
+
         svg() {
             return this.like ? 'color: #ff4060;fill: currentcolor;' : ''
         },
@@ -274,7 +276,37 @@ export default {
         },
         edit() {
             this.$store.state.artwork.dialog = true
-        }
+        },
+        addOrCancelLike() {
+            if (this.like) {
+                this.$confirm('确认取消收藏 ' + this.$store.state.artwork.atlas.title + ' 吗？')
+                        .then(() => {
+                            axios.delete("image/like/" + this.$store.state.artwork.atlas.id)
+                                    .then(res => {
+                                        if (res.data.code === 0) {
+                                            this.$store.commit('artwork/cancelLike')
+                                            this.$message.success("取消收藏成功")
+                                        } else {
+                                            this.$message.error('取消收藏失败')
+                                        }
+                                    }, err => {
+                                        this.$message.error(err)
+                                    })
+                        })
+            } else {
+                axios.post("image/like/" + this.$store.state.artwork.atlas.id)
+                        .then(res => {
+                            if (res.data.code === 0) {
+                                this.$message.success("收藏成功")
+                                this.$store.commit('artwork/like')
+                            } else {
+                                this.$message.error('收藏失败')
+                            }
+                        }, err => {
+                            this.$message.error(err)
+                        })
+            }
+        },
     },
     beforeCreate() {
         let aid = this.$route.params.aid;

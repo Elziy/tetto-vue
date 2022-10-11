@@ -19,6 +19,7 @@ import tags from "@/components/common/tags";
 import recommendedWorks from "@/components/home/recommendedWorks";
 
 export default {
+    name: "index",
     components: {
         navbar,
         tags,

@@ -1,27 +1,13 @@
 <template>
     <el-tabs v-model="activeName" type="card">
-        <el-tab-pane label="作品" name="works" :lazy="true">
+        <el-tab-pane label="作品" name="works">
             <user-works></user-works>
         </el-tab-pane>
         <el-tab-pane v-if="$store.state.space.self" label="收藏" name="likes" :lazy="true">
-            <!--<div class="container">-->
-            <!--    <el-row>-->
-            <!--        <el-col :span="2" :offset="2">-->
-            <!--            <div style="font-size: 20px">-->
-            <!--                收藏作品-->
-            <!--            </div>-->
-            <!--        </el-col>-->
-            <!--        <el-col :span="4" :offset="16">-->
-            <!--            <div>-->
-            <!--                公开-->
-            <!--            </div>-->
-            <!--        </el-col>-->
-            <!--    </el-row>-->
-            <!--</div>-->
-            <user-likes :img-num="likeNum" empty="暂无收藏"></user-likes>
+            <user-likes empty="暂无收藏"></user-likes>
         </el-tab-pane>
         <el-tab-pane v-if="$store.state.space.self" label="浏览历史" name="histories" :lazy="true">
-            <user-likes :imgNum="historyNum" empty="暂无历史"></user-likes>
+            <user-likes empty="暂无历史"></user-likes>
         </el-tab-pane>
     </el-tabs>
 </template>

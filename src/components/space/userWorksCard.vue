@@ -3,7 +3,6 @@
         <div>
             <el-link :underline="false" type="text" @click="imgDetail">
                 <el-image :src="imgUrl" class="main-image"></el-image>
-                <!--<img :src="imgUrl" class="main-image" alt="img">-->
             </el-link>
         </div>
         <div style="height: 22px;">
@@ -25,7 +24,15 @@ export default {
     },
     methods: {
         imgDetail() {
-            window.location.href = "/artworks/" + this.aid;
+            // window.location.href = "/artworks/" + this.aid;
+            this.$router.push(
+                    {
+                        name: "artworks",
+                        params: {
+                            aid: this.aid
+                        }
+                    }
+            );
         },
     }
 }

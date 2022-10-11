@@ -16,6 +16,7 @@ const actions = {
 					store.state.artwork.tags = res.data.data.tags;
 					store.state.artwork.aid = res.data.data.aid;
 					store.state.artwork.latestAtlas = res.data.data.latestAtlas;
+					store.state.artwork.like = res.data.data.like;
 					if (store.state.auth.uid == store.state.artwork.userInfo.uid) {
 						store.state.artwork.self = true;
 					}
@@ -41,6 +42,14 @@ const mutations = {
 		state.atlas.title = data.title;
 		state.atlas.description = data.description;
 		state.atlas.isPublic = data.isPublic;
+	},
+	
+	like(state) {
+		state.like = true;
+	},
+	
+	cancelLike(state) {
+		state.like = false;
 	}
 };
 const state = {
@@ -60,6 +69,8 @@ const state = {
 	latestAtlas: [],
 	// 修改对话框
 	dialog: false,
+	// 是否收藏
+	like: false,
 };
 
 export default {

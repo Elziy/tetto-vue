@@ -1,6 +1,8 @@
 <template>
     <div id="app" class="overflowAuto">
-        <router-view/>
+        <keep-alive include="index">
+            <router-view></router-view>
+        </keep-alive>
     </div>
 </template>
 

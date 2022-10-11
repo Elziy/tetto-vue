@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div>
-            <a href="#"><img :src="i" class="main-image" alt="img"></a>
-        </div>
+        <el-link :underline="false" type="text" @click="imgDetail">
+            <el-image :src="imgUrl" class="main-image"></el-image>
+        </el-link>
         <div style="height: 22px;">
             <el-button type="text"><span style="color: black">{{ title }}</span></el-button>
         </div>
@@ -25,12 +25,21 @@ export default {
         return {
             i,
             title: "title",
-            userName: "userName"
+            userName: "userName",
+
         };
+    },
+    props: {
+        title: String,
+        imgUrl: null,
+        aid: Number,
     },
     methods: {
         userSpace() {
-            this.$message.success("用户空间");
+            window.location.href = "/space/" + this.userName;
+        },
+        imgDetail() {
+            window.location.href = "/artworks/" + this.aid;
         },
     }
 }
