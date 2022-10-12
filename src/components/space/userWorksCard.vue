@@ -43,7 +43,7 @@ export default {
     border-radius: 8%;
     width: 220px;
     height: 220px;
-    /*object-fit: cover;*/
+    object-fit: cover;
 }
 
 span {

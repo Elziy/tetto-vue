@@ -4,42 +4,52 @@
             <el-image :src="imgUrl" class="main-image"></el-image>
         </el-link>
         <div style="height: 22px;">
-            <el-button type="text"><span style="color: black">{{ title }}</span></el-button>
+            <el-link @click="imgDetail" :underline="false" type="text"><span>{{ title |title }}</span></el-link>
         </div>
         <div>
-            <img :src="i" style="" class="face-avatar-image" alt="img">
+            <img :src="avatar" class="face-avatar-image" alt="avatar">
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <el-button type="text" @click="userSpace">
-                <span style="color: black">{{ userName }}</span>
-            </el-button>
+            <el-link :underline="false" type="text" @click="userSpace">
+                <span>{{ username }}</span>
+            </el-link>
         </div>
     </div>
 </template>
 
 <script>
-import i from '@/assets/images/face.jpg'
 
 export default {
     name: "imgCard",
-    data() {
-        return {
-            i,
-            title: "title",
-            userName: "userName",
-
-        };
-    },
     props: {
         title: String,
-        imgUrl: null,
+        imgUrl: String,
         aid: Number,
+        uid: Number,
+        username: String,
+        avatar: String,
     },
     methods: {
         userSpace() {
-            window.location.href = "/space/" + this.userName;
+            this.$router.push(
+                    {
+                        name: "space",
+                        params: {
+                            uid: this.uid
+                        }
+                    }
+            );
+            // window.location.href = "/space/" + this.uid;
         },
         imgDetail() {
-            window.location.href = "/artworks/" + this.aid;
+            // window.location.href = "/artworks/" + this.aid;
+            this.$router.push(
+                    {
+                        name: "artworks",
+                        params: {
+                            aid: this.aid
+                        }
+                    }
+            );
         },
     }
 }
@@ -50,6 +60,7 @@ export default {
     border-radius: 8%;
     width: 180px;
     height: 180px;
+    object-fit: cover;
 }
 
 .face-avatar-image {
@@ -62,5 +73,20 @@ span {
     color: black;
     font-size: 15px;
     font-weight: bold;
+}
+
+el-link:hover {
+    cursor: pointer;
+}
+
+/*鼠标放在图片上高亮*/
+.main-image:hover {
+    /*border: 1px solid #409EFF;*/
+    opacity: 0.9;
+}
+
+a:focus, a:hover {
+    color: #23527c;
+    text-decoration: none !important;
 }
 </style>

@@ -75,8 +75,8 @@ Vue.filter('birthdayFormat', function (input) {
 });
 
 Vue.filter('title', function (title) {
-	if (title.length > 15) {
-		return title.slice(0, 15) + ' ···';
+	if (title.length > 12) {
+		return title.slice(0, 12) + ' ···';
 	} else {
 		return title
 	}

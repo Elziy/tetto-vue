@@ -1,6 +1,6 @@
 <template>
     <div id="app" class="overflowAuto">
-        <keep-alive include="index">
+        <keep-alive :include="keepAlive">
             <router-view></router-view>
         </keep-alive>
     </div>
@@ -8,7 +8,13 @@
 
 <script>
 
-export default {}
+export default {
+    data() {
+        return {
+            keepAlive: ['index', 'index_home']
+        }
+    }
+}
 </script>
 
 

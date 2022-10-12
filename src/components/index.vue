@@ -8,8 +8,8 @@
             <!--推荐作品-->
             <recommended-works></recommended-works>
         </div>
-        <el-footer>
-        </el-footer>
+        <!--<el-footer>-->
+        <!--</el-footer>-->
     </div>
 </template>
 
@@ -19,7 +19,7 @@ import tags from "@/components/common/tags";
 import recommendedWorks from "@/components/home/recommendedWorks";
 
 export default {
-    name: "index",
+    name: "index_home",
     components: {
         navbar,
         tags,

@@ -222,8 +222,8 @@ export default {
                 thumbnailUrl: this.$store.state.upload.thumbnailUrl
             }).then(res => {
                 if (res.data.code === 0) {
-                    this.$message.success("上传成功");
                     window.location.href = '/space/' + this.$store.state.auth.uid;
+                    this.$message.success("上传成功");
                 } else {
                     this.$message.error("上传失败,请稍后重试");
                 }
