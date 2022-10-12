@@ -23,7 +23,7 @@ import userInfo from "@/components/space/userInfo";
 import worksAndLikes from "@/components/space/worksAndLikes";
 
 export default {
-    name: "index",
+    name: "space",
     components: {
         navbar,
         userInfo,
@@ -32,6 +32,7 @@ export default {
     data() {
         return {
             show: false,
+            scrollNum: null
         };
     },
     beforeCreate() {
@@ -40,6 +41,18 @@ export default {
         setTimeout(() => {
             this.show = true;
         }, 20);
+    },
+    beforeRouteLeave(to, from, next) {
+        this.scrollNum = document.documentElement.scrollTop || document.body.scrollTop
+        next();
+    },
+    activated() {
+        //组件激活时，将离开组件是记录的页面位置赋值
+        if (this.scrollNum !== null && this.scrollNum > 0) {
+            //确保移动端和pc端都能正确的设置位置
+            document.documentElement.scrollTop = this.scrollNum
+            document.body.scrollTop = this.scrollNum
+        }
     }
 };
 </script>

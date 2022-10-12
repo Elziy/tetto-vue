@@ -1,5 +1,5 @@
 <template>
-    <div id="app" class="overflowAuto">
+    <div id="app">
         <keep-alive :include="keepAlive">
             <router-view></router-view>
         </keep-alive>
@@ -11,7 +11,7 @@
 export default {
     data() {
         return {
-            keepAlive: ['index', 'index_home']
+            keepAlive: ['space', 'index_home']
         }
     }
 }
@@ -60,5 +60,21 @@ html, body {
 
 html {
     overflow-y: auto;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    /*background-color: #f5f5f5;*/
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: #c0c0c0;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 0;
+    /*background: rgba(0, 0, 0, 0.1);*/
 }
 </style>
