@@ -192,7 +192,7 @@ C26,9.73857625 23.7614237,7.5 21,7.5 C18.9508494,7.5 16.9142799,9.28334665 16,11
                                 <nav style="display: flex;-webkit-box-pack: center;justify-content: center;margin: 12px 0px;">
                                     <div v-for="(item,index) in $store.state.artwork.latestAtlas" :key="index"
                                          style="margin: 0 4px;width: 90px;height: 90px;">
-                                        <a :href="'/artworks/' + item.id"
+                                        <a href="javascript:;" @click="toAtlas(item.id)"
                                            style="text-decoration: none;background-color: transparent;">
                                             <div style="position: relative;display: flex;-webkit-box-align: center;align-items: center;-webkit-box-pack: center;justify-content: center;width: 100%;height: 100%;">
                                                 <img style="object-fit: cover;object-position: center center;width: 100%;height: 100%;border-radius: 8px;background-color: rgb(255, 255, 255);transition: opacity 0.2s ease 0s;border-style: none;"
@@ -214,6 +214,7 @@ C26,9.73857625 23.7614237,7.5 21,7.5 C18.9508494,7.5 16.9142799,9.28334665 16,11
 import navbar from "@/components/common/navbar";
 import changeDialog from "@/components/artwork/changeDialog";
 import axios from "axios";
+import NProgress from "nprogress";
 import ChangeDialog from "@/components/artwork/changeDialog";
 import {mapState} from "vuex";
 
@@ -307,6 +308,15 @@ export default {
                         })
             }
         },
+        toAtlas(id) {
+            this.$store.dispatch("artwork/setImg", id);
+            setTimeout(() => {
+                this.$store.state.artwork.imgs.forEach((item, index) => {
+                    this.list.push(item.imgUrl)
+                })
+                this.show = true;
+            }, 60);
+        },
     },
     beforeCreate() {
         let aid = this.$route.params.aid;
@@ -317,7 +327,7 @@ export default {
             })
             this.show = true;
         }, 60);
-    }
+    },
 }
 </script>
 

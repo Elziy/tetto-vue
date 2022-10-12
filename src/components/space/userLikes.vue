@@ -42,6 +42,17 @@ export default {
             this.$message.error("获取收藏失败");
         })
         NProgress.done();
+    },
+    activated() {
+        this.$http.get('image/atlas/likes').then(res => {
+            if (res.data.code === 0) {
+                this.likes = res.data.data;
+            } else {
+                this.$message.error("获取收藏失败");
+            }
+        }).catch(err => {
+            this.$message.error("获取收藏失败");
+        })
     }
 }
 </script>

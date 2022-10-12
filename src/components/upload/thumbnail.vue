@@ -50,6 +50,7 @@ export default {
     width: 80px;
     height: 80px;
     border-radius: 15%;
-    /*object-fit: cover;*/
+    object-fit: cover;
+    object-position: center;
 }
 </style>

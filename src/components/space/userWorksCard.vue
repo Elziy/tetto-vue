@@ -2,7 +2,7 @@
     <div>
         <div>
             <el-link :underline="false" type="text" @click="imgDetail">
-                <el-image :src="imgUrl" class="main-image"></el-image>
+                <img :src="imgUrl" class="main-image" :alt="title">
             </el-link>
         </div>
         <div style="height: 22px;">
@@ -44,6 +44,7 @@ export default {
     width: 220px;
     height: 220px;
     object-fit: cover;
+    object-position: center;
 }
 
 span {

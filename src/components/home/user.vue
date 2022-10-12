@@ -34,7 +34,8 @@ export default {
                 this.logout();
             }
             if (command === 'space') {
-                window.location.href = '/space/' + this.uid;
+                // window.location.href = '/space/' + this.uid;
+                this.$router.push('/space/' + this.uid);
             }
         },
         logout() {

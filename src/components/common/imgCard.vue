@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-link :underline="false" type="text" @click="imgDetail">
-            <el-image :src="imgUrl" class="main-image"></el-image>
+            <img :src="imgUrl" class="main-image" :alt="title">
         </el-link>
         <div style="height: 22px;">
             <el-link @click="imgDetail" :underline="false" type="text"><span>{{ title |title }}</span></el-link>
@@ -61,6 +61,7 @@ export default {
     width: 180px;
     height: 180px;
     object-fit: cover;
+    /*object-position: center;*/
 }
 
 .face-avatar-image {

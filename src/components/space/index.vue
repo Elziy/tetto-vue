@@ -36,23 +36,29 @@ export default {
         };
     },
     beforeCreate() {
-        this.uid = this.$route.params.uid;
-        this.$store.dispatch("space/setUserInfo", this.uid);
+        let uid = this.$route.params.uid;
+        this.$store.dispatch("space/setUserInfo", uid);
         setTimeout(() => {
             this.show = true;
-        }, 20);
+        }, 40);
     },
     beforeRouteLeave(to, from, next) {
         this.scrollNum = document.documentElement.scrollTop || document.body.scrollTop
         next();
     },
     activated() {
+        let uid = this.$route.params.uid;
+        this.$store.dispatch("space/setUserInfo", uid);
+        setTimeout(() => {
+            this.show = true;
+        }, 60);
         //组件激活时，将离开组件是记录的页面位置赋值
         if (this.scrollNum !== null && this.scrollNum > 0) {
             //确保移动端和pc端都能正确的设置位置
             document.documentElement.scrollTop = this.scrollNum
             document.body.scrollTop = this.scrollNum
         }
+
     }
 };
 </script>

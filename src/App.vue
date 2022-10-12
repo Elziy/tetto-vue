@@ -63,8 +63,8 @@ html {
 }
 
 ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 4px;
+    height: 4px;
     /*background-color: #f5f5f5;*/
 }
 

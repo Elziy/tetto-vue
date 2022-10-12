@@ -14,6 +14,8 @@ const actions = {
 						// 设置是否是自己的空间
 						if (uid == store.state.auth.uid) {
 							store.state.space.self = true;
+						} else {
+							store.state.space.self = false;
 						}
 						store.commit('space/SET_USER_INFO', res.data.data);
 						document.title = res.data.data.username + '的空间';

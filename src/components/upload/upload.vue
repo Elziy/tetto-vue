@@ -28,6 +28,7 @@
                 <span slot="footer" class="dialog-footer" style="text-align: end">
                       <el-button class="th-button" round @click="setTh(newThumbnailFile)">设置为缩略图</el-button>
                 </span>
+
             </el-dialog>
         </div>
         <div style="padding-top: 20px">

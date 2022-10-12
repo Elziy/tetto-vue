@@ -1,7 +1,7 @@
 <template>
     <div>
         <h2>推荐作品</h2>
-        <ul>
+        <ul v-if="show">
             <li v-if="work.length !== 0" v-for="work in works" :key="work.id">
                 <img-card :title="work.title"
                           :imgUrl="work.thumbnailUrl"
@@ -27,6 +27,7 @@ export default {
     data() {
         return {
             works: [],
+            show: false
         };
     },
     beforeCreate() {
@@ -41,6 +42,9 @@ export default {
             this.$message.error("获取作品失败");
         })
         NProgress.done();
+        setTimeout(() => {
+            this.show = true;
+        }, 60);
     }
 }
 </script>

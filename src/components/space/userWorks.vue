@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="show">
         <ul>
             <li v-if="work.length !== 0" v-for="work in works" :key="work.id">
                 <user-works-card
@@ -26,6 +26,7 @@ export default {
     data() {
         return {
             works: [],
+            show: false
         };
     },
     beforeCreate() {
@@ -41,6 +42,25 @@ export default {
             this.$message.error("获取作品失败");
         })
         NProgress.done();
+        setTimeout(() => {
+            this.show = true;
+        }, 40);
+    },
+
+    activated() {
+        let uid = this.$route.params.uid;
+        this.$http.get('image/atlas/info/' + uid).then(res => {
+            if (res.data.code === 0) {
+                this.works = res.data.data;
+            } else {
+                this.$message.error("获取作品失败");
+            }
+        }).catch(err => {
+            this.$message.error("获取作品失败");
+        })
+        setTimeout(() => {
+            this.show = true;
+        }, 40);
     }
 }
 </script>
