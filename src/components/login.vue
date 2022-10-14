@@ -1,38 +1,61 @@
 <template>
-    <div class="login_container">
-        <div class="login_box">
-            <div class="avatar_box" style="padding-top: 15px">
-                <img src="../assets/logo/logo2.png" alt/>
-            </div>
-            <!-- 表单登录 -->
-            <el-form
-                    ref="LoginRef"
-                    label-width="0px"
-                    class="login_from"
-                    :model="form_login"
-                    :rules="loginFormRules"
-            >
-                <el-form-item prop="email">
-                    <el-input placeholder="请输入您的邮箱" prefix-icon="el-icon-user"
-                              v-model="form_login.email"></el-input>
-                </el-form-item>
-                <el-form-item prop="password">
-                    <el-input
-                            placeholder="请输入密码"
-                            prefix-icon="el-icon-lock"
-                            v-model="form_login.password"
-                            type="password"
-                            @keyup.enter.native="login"
-                    ></el-input>
-                </el-form-item>
+    <main>
+        <div class="box">
+            <div class="inner-box">
+                <div class="forms-wrap">
+                    <form class="sign-in-form" autocapitalize="off">
+                        <div class="logo">
+                            <img src="@/assets/logo/logo2.png" alt="">
+                        </div>
 
-                <el-form-item class="btns">
-                    <el-button type="primary" @click="login" round>登录</el-button>
-                    <el-button type="info" @click="register" round>注册</el-button>
-                </el-form-item>
-            </el-form>
+                        <!--<div class="heading" style="text-align: center">-->
+                        <!--    <h2>欢迎回来</h2>-->
+                        <!--</div>-->
+
+                        <div class="actual-form">
+                            <div class="input-wrap">
+                                <input @focus="focus" @blur="blur" @change="checkEmail(form.email)" type="text"
+                                       minlength="6"
+                                       class="input-field"
+                                       v-model="form.email"
+                                       required>
+                                <!--<i class="el-icon-message"></i>-->
+                                <label for="email">邮箱</label>
+                                <div style="padding-top: 2rem">
+                                    <span style="color: #f56c6c">{{ error.email }}</span>
+                                </div>
+                            </div>
+
+                            <div class="input-wrap">
+                                <input @focus="focus" @blur="blur"
+                                       @change="checkPassword(form.password)"
+                                       type="password"
+                                       minlength="6"
+                                       class="input-field"
+                                       v-model="form.password"
+                                       required>
+                                <!--<i class="el-icon-key"></i>-->
+                                <label>密码</label>
+                                <div style="padding-top: 2rem">
+                                    <span style="color: #f56c6c">{{ error.password }}</span>
+                                </div>
+                            </div>
+
+
+                            <el-button :disabled="disabled" class="sign-btn" @click="login" v-html="name">登录
+                            </el-button>
+
+                            <!--<p class="text">忘记账号或密码？</p>-->
+                            <div class="heading" style="text-align: right">
+                                <h6>还没有注册账号？</h6>
+                                <a href="javascript:;" @click="register" class="toggle">点击注册</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-    </div>
+    </main>
 </template>
 
 <script>
@@ -41,23 +64,15 @@ import {mapActions} from "vuex";
 export default {
     data() {
         return {
-            form_login: {
+            disabled: false,
+            name: '登录',
+            form: {
                 email: "lzy@163.com",
                 password: "123456"
             },
-            loginFormRules: {
-                email: [
-                    {required: true, message: "请输入您的邮箱", trigger: "blur"},
-                    {
-                        type: 'email',
-                        message: '请输入正确的邮箱地址',
-                        trigger: ['blur', 'change'],
-                    },
-                ],
-                password: [
-                    {required: true, message: "请输入密码", trigger: "blur"},
-                    {min: 6, max: 15, message: "密码长度在 6 到 15 个字符", trigger: "blur"}
-                ]
+            error: {
+                email: "",
+                password: ""
             }
         };
     },
@@ -67,10 +82,11 @@ export default {
             this.$router.replace('/register')
         },
         login() {
-            // this.$router.push("/home")
-            this.$refs.LoginRef.validate(async valid => {
-                if (!valid) return;
-                this.$http.post("auth/user/login", this.form_login)
+            // 验证
+            if (this.checkEmail(this.form.email) && this.checkPassword(this.form.password)) {
+                this.disabled = true;
+                this.name = '登陆中<i class="el-icon-loading"></i>';
+                this.$http.post("auth/user/login", this.form)
                         .then(response => {
                                     if (response.data.code === 0) {
                                         let userInfo = response.data.data;
@@ -89,8 +105,55 @@ export default {
                                     return false;
                                 }
                         );
-            });
+                setTimeout(() => {
+                    this.disabled = false;
+                    this.name = '登录';
+                }, 1000)
+            } else {
+                this.$message.warning("请输入正确的邮箱");
+            }
         },
+        validEmail(email) {
+            let reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+            return reg.test(email);
+        },
+        checkEmail(value) {
+            if (value === '') {
+                this.error.email = '邮箱不能为空'
+                return false
+            } else {
+                if (!this.validEmail(value)) {
+                    this.error.email = '请输入正确的邮箱'
+                    return false
+                } else {
+                    this.error.email = ''
+                    return true
+                }
+            }
+        },
+        checkPassword(value) {
+            if (value === '') {
+                this.error.password = '密码不能为空'
+                return false
+            } else {
+                if (value.length < 6) {
+                    this.error.password = '密码不能小于6位'
+                    return false
+                } else {
+                    this.error.password = ''
+                    return true
+                }
+            }
+        },
+        focus(event) {
+            event.target.classList.add("active");
+            this.error.email = ''
+            this.error.password = ''
+        },
+        blur(event) {
+            if (event.target.value !== '') return;
+            event.target.classList.remove("active");
+        }
     },
     beforeCreate() {
         if (this.$store.state.auth.uid !== '' && this.$store.state.auth.avatar !== '' && this.$store.state.auth.username !== '' && this.$store.state.auth.token !== '') {
@@ -100,72 +163,210 @@ export default {
         this.$store.commit('auth/SET_UID', '');
         this.$store.commit('auth/SET_USERNAME', '');
         this.$store.commit('auth/SET_AVATAR', '');
+    },
+    mounted() {
+        if (this.form.email !== '' || this.form.password !== '') {
+            const inputs = document.querySelectorAll(".input-field");
+            inputs.forEach(input => {
+                input.classList.add("active");
+            });
+        }
     }
 };
 </script>
 
-<style lang="less" scoped>
-.login_container {
-    // background-color: rgb(43, 95, 173);
-    height: 100%;
-    background-image: url('../assets/images/login.jpg');
-    background-size: cover;
-    background-position: 0 60%;
+<style scoped>
+*,
+*::before,
+*::after {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
 }
 
-.login_box {
-    // background-color: white;
-    background: rgba(255, 255, 255, 0.8);
-    height: 350px;
-    width: 460px;
-    // border-radius: 7px;
-    border: white;
+body,
+input {
+    font-family: "Poppins", sans-serif;
+}
+
+main {
+    height: 100%;
+    background-size: cover;
+    background-position: 0 60%;
+    background-image: url("../assets/images/login.jpg");
+    width: 100%;
+    min-height: 100vh;
+    overflow: hidden;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.box {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    height: 563px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 1.4rem;
+    box-shadow: 0 60px 40px -30px rgba(0, 0, 0, 0.27);
+}
+
+.inner-box {
     position: absolute;
+    width: calc(100% - 4.1rem);
+    height: calc(100% - 4.1rem);
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-
-    .avatar_box {
-        //width: 100px;
-        //height: 100px;
-        border-radius: 50%;
-        margin: 0 auto;
-        //border: 2px solid white;
-        // box-shadow: white;
-        position: absolute;
-        //left: 5%;
-        //transform: translate(-50%, -50%);
-        text-align: center;
-
-        img {
-            height: 60%;
-            width: 60%;
-            border-radius: 50%;
-            //transform: scale(1);
-        }
-    }
 }
 
-.login_from {
+.forms-wrap {
     position: absolute;
-    bottom: 30px;
-    width: 80%;
-    left: 50%;
-    transform: translate(-50%);
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    transition: 0.8s ease-in-out;
 }
 
-.btns {
+form {
+    max-width: 350px;
+    width: 100%;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    transition: opacity 0.02s 0.4s;
+}
+
+form.sign-up-form {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.logo {
     display: flex;
     justify-content: center;
-    margin-top: 50px;
+    padding-top: 2rem;
 }
 
-.el-button.is-round {
-    border-radius: 20px;
-    padding: 12px 50px;
+.logo img {
+    width: 85%;
+    border-radius: 50%;
 }
 
-.el-button + .el-button {
-    margin-left: 30px;
+.logo h4 {
+    font-size: 1.1rem;
+    margin-top: -9px;
+    letter-spacing: -0.5px;
+    color: #151111;
+}
+
+
+.heading h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #151111;
+}
+
+.heading h6 {
+    color: #bababa;
+    font-weight: 400;
+    font-size: 0.65rem;
+    display: inline;
+}
+
+.toggle {
+    color: #151111;
+    text-decoration: none;
+    font-size: 0.65rem;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.toggle:hover {
+    color: #3996fb;
+    text-decoration: none;
+}
+
+.input-wrap {
+    position: relative;
+    height: 37px;
+    margin-bottom: 2rem;
+}
+
+.input-field {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: none;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #bbb;
+    padding: 0;
+    font-size: 0.95rem;
+    color: #151111;
+    transition: 0.4s;
+}
+
+label {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.95rem;
+    color: #bbb;
+    pointer-events: none;
+    transition: 0.4s;
+}
+
+.input-field.active {
+    border-bottom-color: #151111;
+}
+
+.input-field.active + label {
+    font-size: 0.75rem;
+    top: -2px;
+}
+
+.sign-btn {
+    display: inline-bLock;
+    width: 100%;
+    height: 43px;
+    background-coLor: #3996fb;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 0.8rem;
+    font-size: 0.8rem;
+    margin-bottom: 2rem;
+    transition: 0.3s;
+}
+
+.sign-btn:hover {
+    background-color: rgb(0, 144, 240, 0.80);
+}
+
+.text {
+    color: #bbb;
+    font-size: 0.7rem;
+}
+
+.text a {
+    color: #bbb;
+    transition: 0.3s;
+}
+
+.text a:hover {
+    color: #3286e1;
+    text-decoration: none;
 }
 </style>
