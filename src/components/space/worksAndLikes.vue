@@ -6,9 +6,10 @@
         <el-tab-pane v-if="$store.state.space.self" label="收藏" name="likes">
             <user-likes empty="暂无收藏"></user-likes>
         </el-tab-pane>
-        <el-tab-pane v-if="$store.state.space.self" label="浏览历史" name="histories">
-            <user-likes empty="暂无历史"></user-likes>
-        </el-tab-pane>
+        <!--<el-tab-pane v-if="$store.state.space.self" label="浏览历史" name="histories">-->
+        <!--    <user-likes empty="暂无历史"></user-likes>-->
+        <!--</el-tab-pane>-->
+        <br>
     </el-tabs>
 </template>
 

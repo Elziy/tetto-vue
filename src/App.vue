@@ -11,7 +11,7 @@
 export default {
     data() {
         return {
-            keepAlive: ['space', 'index_home']
+            keepAlive: ['space', 'index_home', 'navbar']
         }
     }
 }

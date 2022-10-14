@@ -25,8 +25,8 @@ export default {
     },
     data() {
         return {
-            works: [],
-            show: false
+            show: false,
+            works: []
         };
     },
     beforeCreate() {
