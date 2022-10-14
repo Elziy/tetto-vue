@@ -54,6 +54,12 @@
                                             <section
                                                     style="display: flex;flex-flow: row-reverse;padding: 8px 12px;height: 48px;box-sizing: border-box;flex: 1 0 0;">
                                                 <div style="position: relative;margin-right: 10px;">
+                                                    <button type="button" @click="del"
+                                                            style="display: block;box-sizing: content-box;padding: 0;color: inherit;background: none;border: none;line-height: 1;height: 32px;cursor: pointer;">
+                                                        <i class="el-icon-close" style="font-size: 28px;color: red"></i>
+                                                    </button>
+                                                </div>
+                                                <div style="position: relative;margin-right: 10px;">
                                                     <button type="button"
                                                             style="display: block;box-sizing: content-box;padding: 0;color: inherit;background: none;border: none;line-height: 1;height: 32px;cursor: pointer;">
                                                         <svg viewBox="0 0 32 32" width="32" height="32">
@@ -101,6 +107,7 @@ C26,9.73857625 23.7614237,7.5 21,7.5 C18.9508494,7.5 16.9142799,9.28334665 16,11
                                                         </svg>
                                                     </button>
                                                 </div>
+
                                             </section>
                                         </div>
                                     </div>
@@ -316,6 +323,24 @@ export default {
                 })
                 this.show = true;
             }, 60);
+        },
+        del() {
+            this.$confirm('确认删除 ' + this.$store.state.artwork.atlas.title + ' 吗？')
+                    .then(() => {
+                        axios.delete("image/atlas/" + this.$store.state.artwork.atlas.id)
+                                .then(res => {
+                                    if (res.data.code === 0) {
+                                        this.$message.success("删除成功")
+                                        this.$router.push({path: "/space/" + this.$store.state.artwork.userInfo.uid})
+                                    } else if (res.data.code === 150009) {
+                                        this.$message.error('只能删除自己的图集')
+                                    } else {
+                                        this.$message.error('删除失败')
+                                    }
+                                }, err => {
+                                    this.$message.error(err)
+                                })
+                    })
         },
     },
     beforeCreate() {
