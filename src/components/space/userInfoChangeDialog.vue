@@ -108,20 +108,4 @@ export default {
     border-radius: 50%;
     /*align-items: center;*/
 }
-
-::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-    /*background-color: #f5f5f5;*/
-}
-
-::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    background: #c0c0c0;
-}
-
-::-webkit-scrollbar-track {
-    border-radius: 0;
-    /*background: rgba(0, 0, 0, 0.1);*/
-}
 </style>

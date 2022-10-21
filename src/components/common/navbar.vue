@@ -1,6 +1,6 @@
 <template>
-    <el-header style="height: 80px;padding-top: 6px">
-        <el-row type="flex" class="row-bg">
+    <el-header style="height: 72px;padding-top: 6px;">
+        <el-row type="flex" class="row-bg" style="overflow-y: auto">
             <el-col :span="1" style="padding-left: 10px;padding-top: 6px">
                 <!--<el-button type="text" icon="el-icon-s-operation" style="font-size: 20px"></el-button>-->
                 <left-drawer></left-drawer>
@@ -10,9 +10,8 @@
                 <logo></logo>
             </el-col>
 
-            <el-col :span="7" style="padding-top: 10px">
-                <el-input type="text" placeholder="搜索作品" v-model="search" suffix-icon="el-icon-search">
-                </el-input>
+            <el-col :span="7" style="padding-top: 10px;z-index: 999">
+                <search></search>
             </el-col>
 
             <template v-if="show">
@@ -43,6 +42,7 @@
 <script>
 import leftDrawer from "@/components/home/leftDrawer";
 import logo from "@/components/common/logo";
+import search from "@/components/common/search";
 import notice from "@/components/home/notice";
 import email from "@/components/home/email";
 import user from "@/components/home/user";
@@ -52,6 +52,7 @@ export default {
     components: {
         leftDrawer,
         logo,
+        search,
         notice,
         email,
         user,
@@ -59,7 +60,6 @@ export default {
     data() {
         return {
             show: false,
-            search: null,
         };
     },
     methods: {
@@ -85,8 +85,9 @@ export default {
                                 this.show = true;
                             }, 100);
                         } else {
-                            this.$message.error('登录已过期，请重新登录');
-                            this.$router.push("/login");
+                            this.$message.warning('登录已过期，请重新登录');
+                            this.$store.commit("auth/SET_TOKEN", '');
+                            this.$router.replace("/login");
                         }
                     });
         } else {
@@ -101,7 +102,6 @@ export default {
 <style lang="less" scoped>
 .el-header {
     font-size: 17px;
-    overflow: hidden;
     width: 100%;
 
     img {

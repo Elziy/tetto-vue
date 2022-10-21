@@ -53,12 +53,21 @@
                                         <div>
                                             <section
                                                     style="display: flex;flex-flow: row-reverse;padding: 8px 12px;height: 48px;box-sizing: border-box;flex: 1 0 0;">
-                                                <div style="position: relative;margin-right: 10px;">
+                                                <div v-if="$store.state.artwork.self"
+                                                     style="position: relative;margin-right: 10px;">
                                                     <button type="button" @click="del"
                                                             style="display: block;box-sizing: content-box;padding: 0;color: inherit;background: none;border: none;line-height: 1;height: 32px;cursor: pointer;">
-                                                        <i class="el-icon-close" style="font-size: 28px;color: red"></i>
+                                                        <svg t="1665814278487" class="icon" viewBox="0 0 1024 1024"
+                                                             version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                                             p-id="2821" width="28" height="28">
+                                                            <path d="M847.743 223.953H640.639c-3.132-68.921-60.177-124.029-129.858-124.029s-126.726 55.108-129.858 124.029H173.256c-17.673 0-32 14.327-32 32s14.327 32 32 32h674.487c17.673 0 32-14.327 32-32s-14.327-32-32-32z m-336.962-60.03c34.379 0 62.689 26.426 65.718 60.029H445.064c3.029-33.603 31.338-60.029 65.717-60.029zM767.743 351.79c-17.673 0-32 14.327-32 32v478.173H288.256V383.79c0-17.673-14.327-32-32-32s-32 14.327-32 32v510.173c0 17.673 14.327 32 32 32h511.487c17.673 0 32-14.327 32-32V383.79c0-17.673-14.327-32-32-32z"
+                                                                  fill="#d81e06" p-id="2822"></path>
+                                                            <path d="M449.306 732.802V448.208c0-17.673-14.327-32-32-32s-32 14.327-32 32v284.593c0 17.673 14.327 32 32 32s32-14.326 32-31.999zM640.84 732.802V448.208c0-17.673-14.327-32-32-32s-32 14.327-32 32v284.593c0 17.673 14.327 32 32 32s32-14.326 32-31.999z"
+                                                                  fill="#d81e06" p-id="2823"></path>
+                                                        </svg>
                                                     </button>
                                                 </div>
+
                                                 <div style="position: relative;margin-right: 10px;">
                                                     <button type="button"
                                                             style="display: block;box-sizing: content-box;padding: 0;color: inherit;background: none;border: none;line-height: 1;height: 32px;cursor: pointer;">
@@ -76,6 +85,7 @@ C23,16.4477153 23.4477153,16 24,16 C24.5522847,16 25,16.4477153 25,17 Z" transfo
                                                         </svg>
                                                     </button>
                                                 </div>
+
                                                 <div style="display: flex;position: relative;margin-right: 13px;">
                                                     <button type="button" @click="addOrCancelLike"
                                                             style="display: block;box-sizing: content-box;padding: 0;color: inherit;background: none;border: none;line-height: 1;height: 32px;cursor: pointer;">
@@ -117,6 +127,11 @@ C26,9.73857625 23.7614237,7.5 21,7.5 C18.9508494,7.5 16.9142799,9.28334665 16,11
                                             <div style="width: 600px">
                                                 <h1 style="margin: 0 0 8px;color: rgb(31, 31, 31);font-size: 20px;line-height: 24px;font-weight: bold;">
                                                     {{ $store.state.artwork.atlas.title }}</h1>
+                                                <div v-if="introduceShow"><br>
+                                                    <p v-for="(i,index) in introduceShow" :key="index">
+                                                        {{ i }}
+                                                    </p>
+                                                </div>
                                                 <footer style="display: flex;margin: 16px 0;color: rgb(173, 173, 173);line-height: 18px;">
                                                     <ul style="display: flex;-webkit-box-align: center;align-items: center;margin: 16px -4px;list-style: none;padding: 0px;">
                                                         <li style="display: inline;margin: 0 12px 0 0"
@@ -129,7 +144,7 @@ C26,9.73857625 23.7614237,7.5 21,7.5 C18.9508494,7.5 16.9142799,9.28334665 16,11
                                                     </ul>
                                                 </footer>
                                                 <!--投稿时间-->
-                                                <div title="投稿时间" style="font-size: 12px;line-height: 1;">投稿于
+                                                <div style="font-size: 12px;line-height: 1;">投稿于
                                                     {{ $store.state.artwork.atlas.date }}
                                                 </div>
                                             </div>
@@ -148,8 +163,9 @@ C26,9.73857625 23.7614237,7.5 21,7.5 C18.9508494,7.5 16.9142799,9.28334665 16,11
                                                :src="$store.state.artwork.userInfo.avatar"></el-avatar>
                                 </div>
                                 <div style="display: grid;gap: 2px;margin: 0 8px;color: rgb(173, 173, 173);font-size: 1rem;line-height: calc(1em + 8px);">
-                                    <a style="font-size: 20px;font-weight: bold;margin-left: 0px;word-break: break-all;color: rgb(31, 31, 31);text-decoration: none;"
-                                       :href="'/space/' + $store.state.artwork.userInfo.uid">
+                                    <a href="javascript:;"
+                                       style="font-size: 20px;font-weight: bold;margin-left: 0;word-break: break-all;color: rgb(31, 31, 31);text-decoration: none;"
+                                       @click="space">
                                         <div>{{ $store.state.artwork.userInfo.username }}</div>
                                     </a>
                                 </div>
@@ -191,8 +207,9 @@ C26,9.73857625 23.7614237,7.5 21,7.5 C18.9508494,7.5 16.9142799,9.28334665 16,11
                                     <div style="color: rgb(92, 92, 92);font-size: inherit;line-height: inherit;margin: 0px;font-weight: bold;">
                                         最新作品
                                     </div>
-                                    <a style="margin-left: auto;color: rgb(173, 173, 173);font-size: 12px;line-height: calc(1em + 4px);font-weight: normal;text-decoration: none;"
-                                       :href="'/space/' + $store.state.artwork.userInfo.uid">
+                                    <a href="javascript:;"
+                                       style="margin-left: auto;color: rgb(173, 173, 173);font-size: 12px;line-height: calc(1em + 4px);font-weight: normal;text-decoration: none;"
+                                       @click="space">
                                         查看全部作品
                                     </a>
                                 </header>
@@ -247,6 +264,12 @@ export default {
         path() {
             return this.like ? 'fill: white;' : ''
         },
+        introduceShow() {
+            // 将个人简介按照\n分割成数组
+            if (this.$store.state.artwork.atlas.introduce) {
+                return this.$store.state.artwork.atlas.introduce.split("\n");
+            }
+        },
     },
     methods: {
         toFollowing() {
@@ -285,6 +308,11 @@ export default {
         edit() {
             this.$store.state.artwork.dialog = true
         },
+        space() {
+            this.$router.push({
+                path: '/space/' + this.$store.state.artwork.userInfo.uid
+            })
+        },
         addOrCancelLike() {
             if (this.like) {
                 this.$confirm('确认取消收藏 ' + this.$store.state.artwork.atlas.title + ' 吗？')
@@ -316,6 +344,10 @@ export default {
             }
         },
         toAtlas(id) {
+            if (this.$store.state.artwork.atlas.id === id) {
+                return
+            }
+            this.$router.replace({path: '/artworks/' + id})
             this.$store.dispatch("artwork/setImg", id);
             setTimeout(() => {
                 this.$store.state.artwork.imgs.forEach((item, index) => {
@@ -333,7 +365,7 @@ export default {
                                         this.$message.success("删除成功")
                                         this.$router.push({path: "/space/" + this.$store.state.artwork.userInfo.uid})
                                     } else if (res.data.code === 150009) {
-                                        this.$message.error('只能删除自己的图集')
+                                        this.$message.error(res.data.msg)
                                     } else {
                                         this.$message.error('删除失败')
                                     }
@@ -351,8 +383,11 @@ export default {
                 this.list.push(item.imgUrl)
             })
             this.show = true;
-        }, 60);
+        }, 100);
     },
+    beforeDestroy() {
+        this.$store.commit('artwork/clear')
+    }
 }
 </script>
 

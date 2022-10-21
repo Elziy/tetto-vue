@@ -95,10 +95,12 @@ export default {
             this.$refs['form'].validate((valid) => {
                 if (valid) {
                     NProgress.start();
+                    if (this.form.email === this.$store.state.space.userInfo.email) {
+                        this.form.email = null;
+                    }
                     this.$http.post('auth/user/update', this.form).then(res => {
                                 if (res.data.code === 0) {
                                     this.$store.dispatch('space/setUserInfo', this.$store.state.auth.uid);
-                                    this.$store.commit('auth/SET_UID', this.form.id);
                                     this.$store.commit('auth/SET_USERNAME', this.form.username);
                                     this.$message.success('修改成功');
                                     this.disable = true;
@@ -109,6 +111,7 @@ export default {
                             error => {
                                 this.$message.error('修改失败');
                             });
+                    this.form.email = this.$store.state.space.userInfo.email;
                     NProgress.done();
                 } else {
                     this.$message({

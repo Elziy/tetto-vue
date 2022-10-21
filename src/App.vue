@@ -7,8 +7,12 @@
 </template>
 
 <script>
+import navbar from "@/components/common/navbar";
 
 export default {
+    components: {
+        navbar,
+    },
     data() {
         return {
             keepAlive: ['space', 'index_home', 'navbar']
@@ -21,20 +25,8 @@ export default {
 <style>
 #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
-    /*-webkit-font-smoothing: antialiased;*/
-    /*-moz-osx-font-smoothing: grayscale;*/
-    /*text-align: center;*/
     color: #2c3e50;
 }
-
-/*#nav {*/
-/*  padding: 30px;*/
-/*}*/
-
-/*#nav a {*/
-/*  font-weight: bold;*/
-/*  color: #2c3e50;*/
-/*}*/
 
 .overflowAuto {
     overflow-y: auto;
@@ -56,10 +48,6 @@ html, body {
     height: 100%;
     overflow: auto;
     margin: 0;
-}
-
-html {
-    overflow-y: auto;
 }
 
 ::-webkit-scrollbar {

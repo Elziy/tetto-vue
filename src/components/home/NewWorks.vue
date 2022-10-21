@@ -1,7 +1,7 @@
 <template>
-    <div>
-        <h2>推荐作品</h2>
-        <ul v-if="show">
+    <div v-if="show">
+        <h2>最新作品</h2>
+        <ul>
             <li v-if="work.length !== 0" v-for="work in works" :key="work.id">
                 <img-card :title="work.title"
                           :imgUrl="work.thumbnailUrl"
@@ -20,7 +20,7 @@ import imgCard from "@/components/common/imgCard";
 import NProgress from "nprogress";
 
 export default {
-    name: "imgs",
+    name: "NewWorks",
     components: {
         imgCard
     },
@@ -32,12 +32,11 @@ export default {
     },
     beforeCreate() {
         NProgress.start();
-        this.$http.get('image/atlas/recommend').then(res => {
+        this.$http.get('image/atlas/new').then(res => {
             if (res.data.code === 0) {
                 this.works = res.data.data;
             } else if (res.data.code === 401) {
                 this.$store.commit('auth/SET_TOKEN', '');
-                this.$message.warning('登录已过期，请重新登录');
                 this.$router.replace('/login');
             } else {
                 this.$message.error('获取推荐作品失败');

@@ -1,12 +1,17 @@
 <template>
-    <a href="http://art.tetto.com">
+    <a  href="javascript:;" @click="index">
         <img src="@/assets/logo/logo2.png" alt="logo">
     </a>
 </template>
 
 <script>
 export default {
-    name: "logo"
+    name: "logo",
+    methods: {
+        index() {
+            this.$router.push("/");
+        }
+    }
 }
 </script>
 

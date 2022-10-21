@@ -42,11 +42,11 @@ export default {
             this.$http.get('auth/user/logout').then(res => {
                 if (res.data.code === 0) {
                     this.$store.dispatch('auth/logout');
-                    this.$router.push('/login');
+                    this.$router.replace('/login');
                     this.$message.success('注销成功');
                 } else if (res.data.code === 401) {
                     this.$store.dispatch('auth/logout');
-                    this.$router.push('/login');
+                    this.$router.replace('/login');
                     this.$message.success('注销成功');
                 } else {
                     this.$message.error('注销失败');

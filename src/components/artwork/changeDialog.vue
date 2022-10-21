@@ -1,6 +1,7 @@
 <template>
     <el-dialog title="编辑作品"
                :visible.sync="$store.state.artwork.dialog"
+               @open="open"
                @close="closeLog"
                center
                :destroy-on-close="true"
@@ -53,13 +54,19 @@ export default {
                     {min: 1, max: 32, message: '长度在 1 到 32 个字符', trigger: 'blur'}
                 ],
                 introduce: [
-                    {required: true, message: '请输入说明', trigger: 'blur'},
+                    {message: '请输入说明', trigger: 'blur'},
                     {min: 1, max: 200, message: '长度在 1 到 200 个字符', trigger: 'blur'}
                 ],
             }
         };
     },
     methods: {
+        open() {
+            this.form.id = this.$store.state.artwork.atlas.id;
+            this.form.title = this.$store.state.artwork.atlas.title;
+            this.form.introduce = this.$store.state.artwork.atlas.introduce;
+            this.form.isPublic = this.$store.state.artwork.atlas.isPublic;
+        },
         closeLog() {
             this.$store.commit('artwork/closeDialog');
         },

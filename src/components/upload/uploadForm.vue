@@ -69,7 +69,7 @@ export default {
                     {min: 1, max: 32, message: '长度在 1 到 32 个字符', trigger: 'blur'}
                 ],
                 introduce: [
-                    {required: true, message: '请输入说明', trigger: 'blur'},
+                    {message: '请输入说明', trigger: 'blur'},
                     {min: 1, max: 200, message: '长度在 1 到 200 个字符', trigger: 'blur'}
                 ],
                 tags: [
@@ -88,7 +88,7 @@ export default {
                         this.disabled = false
                     }, 2000)
                 } else {
-                    this.$message.error('请检查输入')
+                    this.$message.info('请检查输入')
                     return false;
                 }
             });

@@ -1,5 +1,6 @@
 <template>
     <main>
+        <img style="width: 130px;position: absolute;top: 15px;left: 30px" src="@/assets/logo/logo2.png" alt="logo">
         <div class="box">
             <div class="inner-box">
                 <div class="forms-wrap">
@@ -92,8 +93,7 @@ export default {
                                         let userInfo = response.data.data;
                                         let username = userInfo.username
                                         this.Login(userInfo);
-                                        this.$message.success(username + '  登录成功')
-                                        this.$router.push("/")
+                                        window.location.href = "/";
                                     } else if (response.data.code === 401) {
                                         this.$message.error("账号或密码错误！");
                                     } else {
@@ -114,7 +114,7 @@ export default {
             }
         },
         validEmail(email) {
-            let reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+            let reg = /^\w+@[\da-z\.-]+\.([a-z]{2,6}|[\u2E80-\u9FFF]{2,3})$/;
             return reg.test(email);
         },
         checkEmail(value) {
@@ -157,12 +157,13 @@ export default {
     },
     beforeCreate() {
         if (this.$store.state.auth.uid !== '' && this.$store.state.auth.avatar !== '' && this.$store.state.auth.username !== '' && this.$store.state.auth.token !== '') {
-            this.$router.push('/')
+            window.location.href = '/'
+        } else {
+            this.$store.commit('auth/SET_TOKEN', '');
+            this.$store.commit('auth/SET_UID', '');
+            this.$store.commit('auth/SET_USERNAME', '');
+            this.$store.commit('auth/SET_AVATAR', '');
         }
-        this.$store.commit('auth/SET_TOKEN', '');
-        this.$store.commit('auth/SET_UID', '');
-        this.$store.commit('auth/SET_USERNAME', '');
-        this.$store.commit('auth/SET_AVATAR', '');
     },
     mounted() {
         if (this.form.email !== '' || this.form.password !== '') {
@@ -255,7 +256,7 @@ form.sign-up-form {
 .logo {
     display: flex;
     justify-content: center;
-    padding-top: 2rem;
+    padding-top: 1rem;
 }
 
 .logo img {
@@ -322,7 +323,7 @@ label {
     left: 0;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     color: #bbb;
     pointer-events: none;
     transition: 0.4s;
@@ -333,8 +334,8 @@ label {
 }
 
 .input-field.active + label {
-    font-size: 0.75rem;
-    top: -2px;
+    font-size: 0.7rem;
+    top: -0.35rem;
 }
 
 .sign-btn {

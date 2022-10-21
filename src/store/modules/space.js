@@ -20,9 +20,10 @@ const actions = {
 						store.commit('space/SET_USER_INFO', res.data.data);
 						document.title = res.data.data.username + '的空间';
 					} else if (res.data.code === 401) {
-						router.push("/login");
+						store.commit('auth/SET_TOKEN', '');
+						Message.warning('登录已过期，请重新登录');
+						router.replace('/login');
 					} else {
-						Message.error('暂无该用户');
 						router.replace("/404")
 					}
 				},

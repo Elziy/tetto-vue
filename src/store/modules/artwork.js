@@ -20,7 +20,9 @@ const actions = {
 					store.state.artwork.self = store.state.auth.uid == store.state.artwork.userInfo.uid;
 					document.title = res.data.data.atlas.title + ' - ' + store.state.artwork.userInfo.username + '的插画';
 				} else if (res.data.code === 401) {
-					router.push("/login");
+					store.commit('auth/SET_TOKEN', '');
+					Message.warning('登录已过期，请重新登录');
+					router.replace('/login');
 				} else {
 					Message.error('暂无该作品');
 					router.replace("/404")
@@ -43,7 +45,9 @@ const actions = {
 					// store.state.artwork.self = store.state.auth.uid == store.state.artwork.userInfo.uid;
 					document.title = res.data.data.atlas.title + ' - ' + store.state.artwork.userInfo.username + '的插画';
 				} else if (res.data.code === 401) {
-					router.push("/login");
+					store.commit('auth/SET_TOKEN', '');
+					Message.warning('登录已过期，请重新登录');
+					router.replace('/login');
 				} else {
 					Message.error('暂无该作品');
 					router.replace("/404")
@@ -52,7 +56,7 @@ const actions = {
 				Message.error(err)
 			})
 		NProgress.done();
-	}
+	},
 }
 const mutations = {
 	closeDialog(state) {
@@ -62,6 +66,7 @@ const mutations = {
 	changeAtlasInfo(state, data) {
 		state.atlas.title = data.title;
 		state.atlas.description = data.description;
+		state.atlas.introduce = data.introduce
 		state.atlas.isPublic = data.isPublic;
 	},
 	
@@ -71,6 +76,17 @@ const mutations = {
 	
 	cancelLike(state) {
 		state.like = false;
+	},
+	
+	clear(state) {
+		state.atlas = {};
+		state.userInfo = {};
+		state.imgs = [];
+		state.tags = [];
+		state.aid = 0;
+		state.latestAtlas = [];
+		state.like = false;
+		state.self = false;
 	}
 };
 const state = {

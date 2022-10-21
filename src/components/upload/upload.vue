@@ -109,6 +109,7 @@ export default {
             this.dialogVisible = true;
         },
         beforeUpload(file) {
+            console.log(file)
             const size = file.size / 1024 / 1024;
             if (!(file.type === "image/png" || file.type === "image/gif" || file.type === "image/jpg" || file.type === "image/jpeg")) {
                 this.$message.warning("请上传格式为image/png, image/gif, image/jpg, image/jpeg的图片",);
@@ -117,6 +118,11 @@ export default {
                 this.$message.warning("图片大小必须小于10M",);
                 return false
             }
+            return new Promise(async (resolve, reject) => {
+                this.imgCompress(file).then(res => {
+                    resolve(res)
+                })
+            })
         },
         // 上传成功
         success(response, file, fileList) {
@@ -141,7 +147,6 @@ export default {
                             width,
                             height
                         };
-                        console.log(imgUrl)
                         this.imgUrls.push(imgUrl);
                         this.fileList = fileList;
                         this.$message.success(file.name + " 上传成功");
@@ -190,6 +195,56 @@ export default {
                     this.height = image.height
                 }
             }
+        },
+        async imgCompress(file) {
+            // 将文件转img对象
+            const img = await this.fileToImg(file)
+            return new Promise((resolve, reject) => {
+                const canvas = document.createElement('canvas')
+                const context = canvas.getContext('2d')
+                // 获取文件宽高比例
+                const {width: originWidth, height: originHeight} = img
+                // 自定义等比例缩放宽高属性，这里我用的是固定800宽度，高度是等比例缩放
+                const scale = +(originWidth / originHeight).toFixed(2) // 比例取小数点后两位)
+                const targetWidth = 800 // 固定宽
+                const targetHeight = Math.round(800 / scale) // 等比例缩放高
+
+                canvas.width = targetWidth
+                canvas.height = targetHeight
+                context.clearRect(0, 0, targetWidth, targetHeight)
+                // canvas重新绘制图片
+                context.drawImage(img, 0, 0, targetWidth, targetHeight)
+                // canvas转二进制对象转文件对象，返回
+                const type = 'image/png'
+                canvas.toBlob(function (blob) {
+                    const f = new File([blob], file.name, {
+                        type,
+                        lastModified: file.lastModified
+                    })
+                    resolve(f)
+                }, type)
+            })
+        },
+
+        // file转换成img对象
+        fileToImg(file) {
+            return new Promise((resolve, reject) => {
+                const img = new Image()
+                const reader = new FileReader()
+                reader.onload = function (e) {
+                    img.src = e.target.result
+                }
+                reader.onerror = function (e) {
+                    reject(e)
+                }
+                reader.readAsDataURL(file)
+                img.onload = function () {
+                    resolve(img)
+                }
+                img.onerror = function (e) {
+                    reject(e)
+                }
+            })
         }
     },
     // watch: {
@@ -258,42 +313,11 @@ export default {
     border-radius: 2px;
 }
 
-/*ul {*/
-/*    padding: 20px 0 0 65px;*/
-/*    display: flex;*/
-/*    flex-wrap: wrap;*/
-/*    overflow: hidden;*/
-/*}*/
-
-ul {
-    /*display: flex;*/
-    /*overflow-y: auto;*/
-    /*flex-wrap: wrap;*/
-}
-
-
 .upload-span {
     font-weight: bold;
     font-size: 18px;
     color: #858585;
 }
-
-::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-    /*background-color: #f5f5f5;*/
-}
-
-::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    background: #c0c0c0;
-}
-
-::-webkit-scrollbar-track {
-    border-radius: 0;
-    /*background: rgba(0, 0, 0, 0.1);*/
-}
-
 
 .th-button:hover {
     color: #333333;

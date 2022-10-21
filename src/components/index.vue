@@ -1,12 +1,14 @@
 <template>
     <div>
         <navbar></navbar>
+        <br>
         <div class="container">
             <!--标签分类-->
             <tags></tags>
             <br>
             <!--推荐作品-->
             <recommended-works></recommended-works>
+            <new-works></new-works>
         </div>
         <!--<el-footer>-->
         <!--</el-footer>-->
@@ -17,18 +19,20 @@
 import navbar from "@/components/common/navbar";
 import tags from "@/components/common/tags";
 import recommendedWorks from "@/components/home/recommendedWorks";
+import newWorks from "@/components/home/NewWorks";
 
 export default {
     name: "index_home",
+    components: {
+        navbar,
+        tags,
+        recommendedWorks,
+        newWorks
+    },
     data() {
         return {
             scrollNum: null
         };
-    },
-    components: {
-        navbar,
-        tags,
-        recommendedWorks
     },
     beforeRouteLeave(to, from, next) {
         this.scrollNum = document.documentElement.scrollTop || document.body.scrollTop

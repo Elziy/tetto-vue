@@ -1,10 +1,11 @@
 <template>
     <main>
+        <img style="width: 130px;position: absolute;top: 15px;left: 30px" src="@/assets/logo/logo2.png" alt="logo">
         <div class="box">
             <div class="inner-box">
                 <div class="forms-wrap">
                     <form class="sign-in-form" autocapitalize="off">
-                        <div class="heading" style="text-align: center">
+                        <div class="heading" style="text-align: center;padding-top: 1rem">
                             <h2>欢迎注册</h2>
                         </div>
 
@@ -153,7 +154,7 @@ export default {
             }
         },
         validEmail(email) {
-            let reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+            let reg = /^\w+@[\da-z\.-]+\.([a-z]{2,6}|[\u2E80-\u9FFF]{2,3})$/;
             return reg.test(email);
         },
         validPassword(password) {
@@ -371,7 +372,7 @@ label {
     left: 0;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     color: #bbb;
     pointer-events: none;
     transition: 0.4s;
@@ -382,7 +383,7 @@ label {
 }
 
 .input-field.active + label {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     top: -2px;
 }
 

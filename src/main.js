@@ -91,6 +91,7 @@ Vue.filter('introduce', function (title) {
 });
 
 import store from "@/store";
+import './utils/directive'
 
 import { VueCropper } from 'vue-cropper'
 Vue.use(VueCropper);
