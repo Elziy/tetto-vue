@@ -118,11 +118,15 @@ export default {
                 this.$message.warning("图片大小必须小于10M",);
                 return false
             }
-            return new Promise(async (resolve, reject) => {
-                this.imgCompress(file).then(res => {
-                    resolve(res)
-                })
-            })
+            if (size > 1) {
+                return new Promise(async (resolve, reject) => {
+                    this.imgCompress(file).then(res => {
+                        resolve(res)
+                    })
+                });
+            } else {
+                return file
+            }
         },
         // 上传成功
         success(response, file, fileList) {
@@ -180,21 +184,6 @@ export default {
         //文件超出个数限制时的函数
         handleExceed(files, fileList) {
             this.$message.warning(`最多只允许上传${this.limit}张图片`);
-        },
-        //获取图片宽高
-        getWH(file) {
-            let reader = new FileReader()
-            reader.readAsDataURL(file.raw)
-            reader.onload = e => {
-                let img = e.target.result;
-                let image = new Image()
-                image.src = img
-
-                image.onload = _ => {
-                    this.width = image.width
-                    this.height = image.height
-                }
-            }
         },
         async imgCompress(file) {
             // 将文件转img对象
@@ -269,13 +258,18 @@ export default {
                 this.$message.error("请设置缩略图");
                 return false;
             }
+            let username = this.$store.state.auth.username;
+            let avatar = this.$store.state.auth.avatar;
+
             this.$http.post('image/atlas/upload', {
                 title: this.form.title,
                 introduce: this.form.introduce,
                 tags: this.form.tags,
                 isPublic: this.form.isPublic,
                 imgUrls: this.imgUrls,
-                thumbnailUrl: this.$store.state.upload.thumbnailUrl
+                thumbnailUrl: this.$store.state.upload.thumbnailUrl,
+                username,
+                avatar
             }).then(res => {
                 if (res.data.code === 0) {
                     window.location.href = '/space/' + this.$store.state.auth.uid;

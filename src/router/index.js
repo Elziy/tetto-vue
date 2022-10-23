@@ -46,6 +46,11 @@ const routes = [{
 	meta: {title: "作品详情", isAuth: true},
 	component: () => import('@/components/artwork/artworks')
 }, {
+	path: '/tags/:tag',
+	name: 'tags',
+	meta: {title: "搜索结果", isAuth: true},
+	component: () => import('@/components/search/Search')
+}, {
 	path: '*',
 	redirect: '/404',
 }];
