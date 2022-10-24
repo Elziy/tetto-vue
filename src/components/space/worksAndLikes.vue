@@ -34,7 +34,6 @@ export default {
     methods: {
         before() {
             this.scrollNum = document.documentElement.scrollTop || document.body.scrollTop
-            console.log(this.scrollNum)
         },
         tabClick(tab, event) {
             // 切换后保持滚动位置

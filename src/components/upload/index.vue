@@ -1,6 +1,5 @@
 <template>
     <div>
-        <navbar></navbar>
         <div>
             <div style="text-align: center">
                 <upload ref="upload" :limit="10"></upload>

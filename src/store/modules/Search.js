@@ -1,11 +1,11 @@
 const actions = {}
 const mutations = {
-	setShowNav(state, showDav) {
-		state.showNav = showDav
+	SET_KEYWORD(state, keyword) {
+		state.keyword = keyword
 	}
 }
 const state = {
-	showNav: true,
+	keyword: '',
 };
 
 export default {

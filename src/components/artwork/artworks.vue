@@ -1,6 +1,5 @@
 <template>
     <div v-if="show">
-        <navbar></navbar>
         <div style="background:#f5f5f5;display: flex;position: relative;flex-flow: column">
             <div style="margin: 0 auto;max-width: 1224px;">
                 <div style="margin-top: 40px;display: flex;padding-bottom: 56px;">
@@ -137,8 +136,8 @@ C26,9.73857625 23.7614237,7.5 21,7.5 C18.9508494,7.5 16.9142799,9.28334665 16,11
                                                         <li style="display: inline;margin: 0 12px 0 0"
                                                             v-for="(item,index) in $store.state.artwork.tags"
                                                             :key="index">
-                                                            <span><a
-                                                                    :href="'/tags/'+ item.substring(1,item.length) +'/artworks'">
+                                                            <span><a href="javascript:;"
+                                                                     @click="toTags(item.substring(1,item.length))">
                                                                 {{ item }}</a></span>
                                                         </li>
                                                     </ul>
@@ -355,6 +354,14 @@ export default {
                 })
                 this.show = true;
             }, 60);
+        },
+        toTags(tag) {
+            this.$router.push({
+                name: 'tags',
+                params: {
+                    tag: tag
+                }
+            })
         },
         del() {
             this.$confirm('确认删除 ' + this.$store.state.artwork.atlas.title + ' 吗？')

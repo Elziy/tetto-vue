@@ -95,6 +95,9 @@ export default {
                 this.show = true;
             }, 8);
         }
+    },
+    beforeDestroy() {
+        console.log(1)
     }
 }
 </script>

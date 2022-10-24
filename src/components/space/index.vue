@@ -1,6 +1,5 @@
 <template>
     <div v-if="show">
-        <navbar></navbar>
         <!--封面-->
         <div style="height: 180px;width: 100%">
             <div class="userInfo-bg-img" style="background: #fafafa"></div>

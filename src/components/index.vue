@@ -1,6 +1,5 @@
 <template>
     <div>
-        <navbar></navbar>
         <br>
         <div class="container">
             <!--标签分类-->

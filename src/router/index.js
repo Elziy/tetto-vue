@@ -69,7 +69,6 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-	NProgress.start();
 	// 没有token
 	if (!store.state.auth.token) {
 		if (to.meta.isAuth) {
@@ -83,7 +82,6 @@ router.beforeEach((to, from, next) => {
 
 router.afterEach((to, from) => {
 	document.title = to.meta.title || 'tetto(特图)-插画分享'
-	NProgress.done();
 });
 
 export default router;

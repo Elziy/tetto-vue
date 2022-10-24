@@ -156,6 +156,7 @@ export default {
         }
     },
     beforeCreate() {
+        this.$store.commit('defaultStore/setShowNav', false);
         if (this.$store.state.auth.uid !== '' && this.$store.state.auth.avatar !== '' && this.$store.state.auth.username !== '' && this.$store.state.auth.token !== '') {
             window.location.href = '/'
         } else {

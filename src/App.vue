@@ -1,5 +1,6 @@
 <template>
     <div id="app">
+        <navbar v-if="showNav"></navbar>
         <keep-alive :include="keepAlive">
             <router-view></router-view>
         </keep-alive>
@@ -8,6 +9,7 @@
 
 <script>
 import navbar from "@/components/common/navbar";
+import {mapState} from "vuex";
 
 export default {
     components: {
@@ -15,8 +17,11 @@ export default {
     },
     data() {
         return {
-            keepAlive: ['space', 'index_home', 'navbar']
+            keepAlive: ['space', 'index_home', 'navbar', 'Search'],
         }
+    },
+    computed: {
+        ...mapState("defaultStore", ["showNav"])
     }
 }
 </script>

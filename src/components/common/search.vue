@@ -1,11 +1,18 @@
 <template>
     <div class="search">
-        <el-input @keyup.enter.native="goto" @focus="focus" type="text" placeholder="搜索作品" v-model="search">
-            <el-button @click="goto" type="text" slot="suffix" icon="el-icon-search"></el-button>
+        <el-input @keyup.enter.native="goto(search)" @focus="focus" type="text" placeholder="搜索作品" v-model="search">
+            <el-button @click="goto(search)" type="text" slot="suffix" icon="el-icon-search"></el-button>
         </el-input>
         <div class="search-panel none">
             <div :class="suggestions" style="max-width: 463px;">
-                <div class="suggest-item" tabindex="0"><em class="suggest_high_light">css</em>布局</div>
+                <!--<div class="suggest-item" tabindex="0"><em class="suggest_high_light">css</em>布局</div>-->
+                <div v-if="suggest.length != 0"
+                     v-for="(suggest,index) in suggests"
+                     :key="index" class="suggest-item"
+                     v-html="suggest.suggest"
+                     @click="goto(suggest.tag)"
+                >
+                </div>
             </div>
 
             <div :class="trending" style="max-width: 463px;">
@@ -20,6 +27,7 @@
 
 <script>
 import TrendingDouble from "@/components/common/trending-double";
+
 export default {
     name: "search",
     components: {
@@ -27,29 +35,54 @@ export default {
     },
     data() {
         return {
-            search: "",
-        }
+            suggests: [],
+        };
     },
     computed: {
+        search: {
+            get() {
+                return this.$store.state.search.keyword;
+            },
+            set(val) {
+                this.$store.commit("search/SET_KEYWORD", val);
+            }
+        },
         trending() {
             return this.search.length > 0 ? "trending none" : "trending";
         },
         suggestions() {
             return this.search.length > 0 ? "suggestions" : "suggestions none";
-        }
+        },
     },
     methods: {
-        goto() {
-            this.$message({
-                message: '搜索功能暂未开放',
-                type: 'warning'
-            });
+        goto(val) {
+            this.search = val;
+            this.$router.push({path: '/tags/' + val});
+            this.blur();
         },
         focus() {
+            this.suggests = [];
             document.querySelector(".search-panel").classList.remove("none");
         },
         blur() {
             document.querySelector(".search-panel").classList.add("none");
+        },
+        getSuggestTags(val) {
+            this.$http.get('search/tags/suggest/' + val).then(res => {
+                if (res.data.code === 0) {
+                    this.suggests = res.data.data;
+                }
+            })
+        },
+    },
+    // 监视输入框的值
+    watch: {
+        search(val) {
+            if (val.length > 0) {
+                if (!document.querySelector(".search-panel").classList.contains("none")) {
+                    this.getSuggestTags(val);
+                }
+            }
         }
     },
     created() {
@@ -64,7 +97,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .none {
     display: none;
 }

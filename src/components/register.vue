@@ -232,6 +232,9 @@ export default {
             this.disabled = !this.checkEmail(this.form.email);
         },
     },
+    beforeCreate() {
+        this.$store.commit('defaultStore/setShowNav', false);
+    }
 }
 </script>
 
