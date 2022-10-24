@@ -139,6 +139,7 @@ export default {
         // 检索词改变则重新检索
         if (keyword !== this.$store.state.search.keyword) {
             this.currPage = 1;
+            console.log(1)
             this.search(keyword);
             this.getTags(keyword);
         }

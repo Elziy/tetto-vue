@@ -3,14 +3,14 @@
         <el-input @keyup.enter.native="goto(search)" @focus="focus" type="text" placeholder="搜索作品" v-model="search">
             <el-button @click="goto(search)" type="text" slot="suffix" icon="el-icon-search"></el-button>
         </el-input>
-        <div class="search-panel none">
+        <div v-show="show" class="search-panel none">
             <div :class="suggestions" style="max-width: 463px;">
                 <!--<div class="suggest-item" tabindex="0"><em class="suggest_high_light">css</em>布局</div>-->
-                <div v-if="suggest.length != 0"
-                     v-for="(suggest,index) in suggests"
-                     :key="index" class="suggest-item"
-                     v-html="suggest.suggest"
-                     @click="goto(suggest.tag)"
+                <div
+                        v-for="(suggest,index) in suggests"
+                        :key="index" class="suggest-item"
+                        v-html="suggest.suggest"
+                        @click="goto(suggest.tag)"
                 >
                 </div>
             </div>
@@ -36,6 +36,7 @@ export default {
     data() {
         return {
             suggests: [],
+            show: false,
         };
     },
     computed: {
@@ -56,13 +57,15 @@ export default {
     },
     methods: {
         goto(val) {
-            this.search = val;
             this.$router.push({path: '/tags/' + val});
             this.blur();
         },
         focus() {
             this.suggests = [];
             document.querySelector(".search-panel").classList.remove("none");
+            if (this.search.length <= 0) {
+                this.show = true;
+            }
         },
         blur() {
             document.querySelector(".search-panel").classList.add("none");
@@ -71,6 +74,7 @@ export default {
             this.$http.get('search/tags/suggest/' + val).then(res => {
                 if (res.data.code === 0) {
                     this.suggests = res.data.data;
+                    this.show = this.suggests.length !== 0;
                 }
             })
         },
@@ -82,6 +86,8 @@ export default {
                 if (!document.querySelector(".search-panel").classList.contains("none")) {
                     this.getSuggestTags(val);
                 }
+            } else {
+                this.show = true;
             }
         }
     },

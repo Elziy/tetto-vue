@@ -35,6 +35,10 @@ export default {
                 hash = hash & hash;
             }
             hash = hash % 5;
+            // 取绝对值
+            if (hash < 0) {
+                hash = -hash;
+            }
             return hash;
         }
     }

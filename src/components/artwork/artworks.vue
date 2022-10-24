@@ -254,8 +254,16 @@ export default {
             list: [],
         }
     },
+    watch: {
+        imgs(val) {
+            this.list = [];
+            val.forEach((item, index) => {
+                this.list.push(item.imgUrl)
+            })
+        },
+    },
     computed: {
-        ...mapState('artwork', {like: 'like'}),
+        ...mapState('artwork', {like: 'like', imgs: 'imgs'}),
 
         svg() {
             return this.like ? 'color: #ff4060;fill: currentcolor;' : ''
@@ -349,11 +357,8 @@ export default {
             this.$router.replace({path: '/artworks/' + id})
             this.$store.dispatch("artwork/setImg", id);
             setTimeout(() => {
-                this.$store.state.artwork.imgs.forEach((item, index) => {
-                    this.list.push(item.imgUrl)
-                })
                 this.show = true;
-            }, 60);
+            }, 20);
         },
         toTags(tag) {
             this.$router.push({
@@ -386,11 +391,8 @@ export default {
         let aid = this.$route.params.aid;
         this.$store.dispatch("artwork/set", aid);
         setTimeout(() => {
-            this.$store.state.artwork.imgs.forEach((item, index) => {
-                this.list.push(item.imgUrl)
-            })
             this.show = true;
-        }, 100);
+        }, 20);
     },
     beforeDestroy() {
         this.$store.commit('artwork/clear')
