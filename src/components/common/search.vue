@@ -19,7 +19,7 @@
                 <div class="header">
                     <div class="title">大家都在搜</div>
                 </div>
-                <TrendingDouble></TrendingDouble>
+                <TrendingDouble @goto="goto"></TrendingDouble>
             </div>
         </div>
     </div>

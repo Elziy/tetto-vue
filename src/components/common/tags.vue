@@ -18,13 +18,23 @@ export default {
         tags: {
             type: Array,
             default: []
+        },
+        routerModel: {
+            type: String,
+            default: "push"
         }
     },
     methods: {
         toTags(tag) {
-            this.$router.push({
-                path: '/tags/' + tag
-            })
+            if (this.routerModel === "replace") {
+                this.$router.replace({
+                    path: '/tags/' + tag
+                })
+            } else {
+                this.$router.push({
+                    path: '/tags/' + tag
+                })
+            }
         },
         hash(val) {
             let hash = 0;

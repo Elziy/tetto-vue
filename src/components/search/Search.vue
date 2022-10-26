@@ -1,29 +1,23 @@
 <template>
     <div class="container">
         <br>
-        <div>
-            <!--<div style="font-size: 22px;font-weight: bold">-->
-            <!--    <span>{{ tag }}</span>-->
-            <!--</div>-->
-            <div v-if="tags.length != 0" class="fRhrLK">
-                <!--<span class="djoQZQ">{{ totalCount || 0 }}</span>-->
-                <span style="color: rgb(133, 133, 133);"> 相关标签</span>
-            </div>
+        <div v-if="tags.length != 0" class="fRhrLK">
+            <!--<span class="djoQZQ">{{ totalCount || 0 }}</span>-->
+            <span style="color: rgb(133, 133, 133);"> 相关标签</span>
         </div>
-        <div style="padding-top: 9px">
-            <tags :tags="tags"></tags>
+        <div style="padding-top: 9px" v-show="show">
+            <tags :tags="tags" router-model="replace"></tags>
         </div>
         <br>
         <div>
             <div class="jcvOjL">
                 <h3 class="ghVHhh">检索结果</h3>
-
-                <div class="dVRwUc">
+                <div class="dVRwUc" v-show="show">
                     <div class="kZlOCw"><span>{{ totalCount || 0 }}</span></div>
                 </div>
             </div>
-            <show-atlas :works="works"></show-atlas>
-            <div style="text-align: center;">
+            <show-atlas v-show="show" :works="works"></show-atlas>
+            <div style="text-align: center;" v-show="show">
                 <el-pagination style="font-size: 50px"
                                hide-on-single-page
                                @current-change="currentChangeHandle"
@@ -52,6 +46,7 @@ export default {
     },
     data() {
         return {
+            show: false,
             tags: [],
             works: [],
             scrollNum: null,
@@ -86,6 +81,7 @@ export default {
                 if (res.data.code === 0) {
                     this.tags = res.data.data;
                 }
+                this.show = true;
             })
             NProgress.done();
         },
@@ -115,6 +111,9 @@ export default {
                 this.currPage = res.data.data.currPage;
                 this.pageSize = res.data.data.pageSize;
             }
+            setTimeout(() => {
+                this.show = true;
+            }, 200)
         })
         this.$http.get('search/tags/related/' + keyword).then(res => {
             if (res.data.code === 0) {
@@ -125,6 +124,7 @@ export default {
     },
     beforeRouteUpdate(to, from, next) {
         let keyword = to.params.tag;
+        document.title = keyword + " - 搜索结果 - tetto";
         this.currPage = 1;
         this.search(keyword);
         this.getTags(keyword);
@@ -132,6 +132,7 @@ export default {
     },
     beforeRouteLeave(to, from, next) {
         this.scrollNum = document.documentElement.scrollTop || document.body.scrollTop
+        this.show = false;
         next();
     },
     activated() {
@@ -139,9 +140,10 @@ export default {
         // 检索词改变则重新检索
         if (keyword !== this.$store.state.search.keyword) {
             this.currPage = 1;
-            console.log(1)
             this.search(keyword);
             this.getTags(keyword);
+        }else {
+            this.show = true;
         }
         //组件激活时，将离开组件是记录的页面位置赋值
         if (this.scrollNum !== null && this.scrollNum > 0) {

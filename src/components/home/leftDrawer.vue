@@ -70,6 +70,14 @@ export default {
     color: #2c3e50;
 }
 
+.left-drawer:active {
+    color: #2c3e50;
+}
+
+.left-drawer:focus {
+    color: #2c3e50;
+}
+
 span {
     padding-left: 3px;
     font-size: 18px;

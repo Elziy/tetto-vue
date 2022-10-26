@@ -3,7 +3,7 @@
         <br>
         <div class="container">
             <!--标签分类-->
-            <tags></tags>
+            <tags :tags="tags"></tags>
             <br>
             <!--推荐作品-->
             <recommended-works></recommended-works>
@@ -19,6 +19,7 @@ import navbar from "@/components/common/navbar";
 import tags from "@/components/common/tags";
 import recommendedWorks from "@/components/home/recommendedWorks";
 import newWorks from "@/components/home/NewWorks";
+import {mapState} from "vuex";
 
 export default {
     name: "index_home",
@@ -32,6 +33,9 @@ export default {
         return {
             scrollNum: null
         };
+    },
+    computed: {
+        ...mapState('Home', {tags: 'tags'})
     },
     beforeRouteLeave(to, from, next) {
         this.scrollNum = document.documentElement.scrollTop || document.body.scrollTop

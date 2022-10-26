@@ -1,44 +1,16 @@
 <template>
     <div class="trendings-double">
         <div class="trendings-col" style="max-width: 226.5px;">
-            <div class="trending-item" tabindex="0">
-                <div class="trendings-rank search-rank-top">1</div>
-                <div class="trending-text">央视曝光间谍被抓现场</div>
-            </div>
-            <div class="trending-item" tabindex="0">
-                <div class="trendings-rank search-rank-top">2</div>
-                <div class="trending-text">屠呦呦以身试药改变世界</div>
-            </div>
-            <div class="trending-item" tabindex="0">
-                <div class="trendings-rank search-rank-top">3</div>
-                <div class="trending-text">Yagao说369是世一上</div>
-            </div>
-            <div class="trending-item" tabindex="0">
-                <div class="trendings-rank">4</div>
-                <div class="trending-text">中式日料完爆传统日料</div>
-            </div>
-            <div class="trending-item" tabindex="0">
-                <div class="trendings-rank">5</div>
-                <div class="trending-text">英伟达取消RTX4080 12GB</div>
+            <div class="trending-item" tabindex="0" v-for="(hot,index) in hotSearch1" :key="index" @click="goto(hot)">
+                <div class="trendings-rank search-rank-top">{{ index + 1 }}</div>
+                <div class="trending-text">{{ hot }}</div>
             </div>
         </div>
         <div class="trendings-col" style="max-width: 226.5px;">
-            <div class="trending-item" tabindex="0">
-                <div class="trendings-rank">6</div>
-                <div class="trending-text">过了20在幼儿园穿成熟点</div>
-            </div>
-            <div class="trending-item" tabindex="0">
-                <div class="trendings-rank">7</div>
-                <div class="trending-text">林志颖车祸后首露面</div><!----></div>
-            <div class="trending-item" tabindex="0">
-                <div class="trendings-rank">8</div>
-                <div class="trending-text">叶罗丽不要再误人子弟</div><!----></div>
-            <div class="trending-item" tabindex="0">
-                <div class="trendings-rank">9</div>
-                <div class="trending-text">间谍教室 莉莉角色PV</div><!----></div>
-            <div class="trending-item" tabindex="0">
-                <div class="trendings-rank">10</div>
-                <div class="trending-text">宝可梦朱紫新精灵电肚蛙</div>
+            <div class="trending-item" tabindex="0" v-for="(hot,index) in hotSearch2" :key="index" @click="goto(hot)">
+                <div class=" trendings-rank">{{ index + hotSearch1.length + 1 }}
+                </div>
+                <div class="trending-text">{{ hot }}</div>
             </div>
         </div>
     </div>
@@ -46,7 +18,36 @@
 
 <script>
 export default {
-    name: "trending-double"
+    name: "trending-double",
+    data() {
+        return {
+            hotSearch: []
+        }
+    },
+    computed: {
+        hotSearch1() {
+            // 取前一半热搜
+            return this.hotSearch.slice(0, Math.ceil(this.hotSearch.length / 2))
+        },
+
+        hotSearch2() {
+            // 取后一半热搜
+            return this.hotSearch.slice(Math.ceil(this.hotSearch.length / 2), this.hotSearch.length)
+        }
+    },
+    methods: {
+        goto(val) {
+            // 调用父组件的方法
+            this.$emit('goto', val)
+        }
+    },
+    beforeCreate() {
+        this.$http.get('search/hotSearch').then(res => {
+            if (res.data.code === 0) {
+                this.hotSearch = res.data.data;
+            }
+        })
+    }
 }
 </script>
 

@@ -34,7 +34,8 @@ export default {
         NProgress.start();
         this.$http.get('image/atlas/recommend').then(res => {
             if (res.data.code === 0) {
-                this.works = res.data.data;
+                this.works = res.data.data.atlas;
+                this.$store.commit('Home/SET_TAGS', res.data.data.tags);
             } else if (res.data.code === 401) {
                 this.$store.commit('auth/SET_TOKEN', '');
                 this.$message.warning('登录已过期，请重新登录');
