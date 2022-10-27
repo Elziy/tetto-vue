@@ -1,8 +1,13 @@
 <template>
     <div>
         <el-link :underline="false" type="text" @click="imgDetail">
-            <div>
+            <div style="position: static">
                 <img :src="imgUrl" class="main-image" :alt="title">
+                <div class="Sxcoo">
+                    <div class="dHgPNe">
+                        <div :class="topClass">{{ top }}</div>
+                    </div>
+                </div>
             </div>
         </el-link>
         <div style="height: 22px;">
@@ -19,16 +24,25 @@
 </template>
 
 <script>
-
 export default {
-    name: "imgCard",
+    name: "imgTopCard",
     props: {
+        top: Number,
         title: String,
         imgUrl: String,
         aid: Number,
         uid: Number,
         username: String,
         avatar: String,
+    },
+    computed: {
+        topClass() {
+            if (this.top === 1 || this.top === 2 || this.top === 3) {
+                return "icVnJq top" + this.top;
+            } else {
+                return "icVnJq top";
+            }
+        },
     },
     methods: {
         userSpace() {
@@ -40,10 +54,8 @@ export default {
                         }
                     }
             );
-            // window.location.href = "/space/" + this.uid;
         },
         imgDetail() {
-            // window.location.href = "/artworks/" + this.aid;
             this.$router.push(
                     {
                         name: "artworks",
@@ -63,7 +75,6 @@ export default {
     width: 180px;
     height: 180px;
     object-fit: cover;
-    /*object-position: center;*/
 }
 
 .face-avatar-image {
@@ -92,4 +103,52 @@ a:focus, a:hover {
     color: #23527c;
     text-decoration: none !important;
 }
+
+.Sxcoo {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: flex-start;
+    padding: 4px 4px 0px;
+    pointer-events: none;
+}
+
+.dHgPNe {
+    margin-right: 4px;
+}
+
+.icVnJq {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: bold;
+    color: rgb(255, 255, 255);
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+    line-height: 24px;
+}
+
+.top1 {
+    background-color: rgb(214, 186, 73, 0.9);
+}
+
+.top2 {
+    background-color: rgb(133, 133, 133, 0.9);
+}
+
+.top3 {
+    background-color: rgb(200, 161, 126, 0.9);
+}
+
+.top {
+    background-color: rgba(0, 0, 0, 0.32);
+}
+
 </style>

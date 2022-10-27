@@ -44,7 +44,7 @@ export default {
                 hash = ((hash << 5) - hash) + char;
                 hash = hash & hash;
             }
-            hash = hash % 5;
+            hash = hash % 8;
             // 取绝对值
             if (hash < 0) {
                 hash = -hash;
@@ -75,6 +75,18 @@ export default {
 
 .bg4 {
     background: rgb(200, 126, 200);
+}
+
+.bg5 {
+    background: #87c1c8;
+}
+
+.bg6 {
+    background: #a47fc9;
+}
+
+.bg7 {
+    background: #c9a47f;
 }
 
 

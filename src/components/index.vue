@@ -8,6 +8,7 @@
             <!--推荐作品-->
             <recommended-works></recommended-works>
             <new-works></new-works>
+            <top-atlas></top-atlas>
         </div>
         <!--<el-footer>-->
         <!--</el-footer>-->
@@ -19,6 +20,7 @@ import navbar from "@/components/common/navbar";
 import tags from "@/components/common/tags";
 import recommendedWorks from "@/components/home/recommendedWorks";
 import newWorks from "@/components/home/NewWorks";
+import topAtlas from "@/components/home/TopAtlas";
 import {mapState} from "vuex";
 
 export default {
@@ -27,7 +29,8 @@ export default {
         navbar,
         tags,
         recommendedWorks,
-        newWorks
+        newWorks,
+        topAtlas
     },
     data() {
         return {

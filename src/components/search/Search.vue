@@ -1,23 +1,25 @@
 <template>
     <div class="container">
         <br>
-        <div v-if="tags.length != 0" class="fRhrLK">
-            <!--<span class="djoQZQ">{{ totalCount || 0 }}</span>-->
-            <span style="color: rgb(133, 133, 133);"> 相关标签</span>
-        </div>
-        <div style="padding-top: 9px" v-show="show">
-            <tags :tags="tags" router-model="replace"></tags>
+        <div v-show="showTags">
+            <div v-if="tags.length != 0" class="fRhrLK">
+                <!--<span class="djoQZQ">{{ totalCount || 0 }}</span>-->
+                <span style="color: rgb(133, 133, 133);"> 相关标签</span>
+            </div>
+            <div style="padding-top: 9px">
+                <tags :tags="tags" router-model="replace"></tags>
+            </div>
         </div>
         <br>
         <div>
             <div class="jcvOjL">
                 <h3 class="ghVHhh">检索结果</h3>
-                <div class="dVRwUc" v-show="show">
+                <div class="dVRwUc" v-show="showAtlas">
                     <div class="kZlOCw"><span>{{ totalCount || 0 }}</span></div>
                 </div>
             </div>
-            <show-atlas v-show="show" :works="works"></show-atlas>
-            <div style="text-align: center;" v-show="show">
+            <show-atlas v-show="showAtlas" :works="works"></show-atlas>
+            <div style="text-align: center;" v-show="showAtlas">
                 <el-pagination style="font-size: 50px"
                                hide-on-single-page
                                @current-change="currentChangeHandle"
@@ -46,7 +48,8 @@ export default {
     },
     data() {
         return {
-            show: false,
+            showTags: false,
+            showAtlas: false,
             tags: [],
             works: [],
             scrollNum: null,
@@ -59,7 +62,6 @@ export default {
     methods: {
         search(keyword) {
             this.$store.commit("search/SET_KEYWORD", keyword);
-            document.title = keyword + " - 搜索结果 - tetto";
             NProgress.start();
             this.$http.post('search/atlas', {
                 keyword: keyword,
@@ -72,6 +74,9 @@ export default {
                     this.currPage = res.data.data.currPage;
                     this.pageSize = res.data.data.pageSize;
                 }
+                setTimeout(() => {
+                    this.showAtlas = true;
+                }, 200)
             })
             NProgress.done();
         },
@@ -81,7 +86,9 @@ export default {
                 if (res.data.code === 0) {
                     this.tags = res.data.data;
                 }
-                this.show = true;
+                setTimeout(() => {
+                    this.showTags = true;
+                }, 200)
             })
             NProgress.done();
         },
@@ -112,13 +119,16 @@ export default {
                 this.pageSize = res.data.data.pageSize;
             }
             setTimeout(() => {
-                this.show = true;
+                this.showAtlas = true;
             }, 200)
         })
         this.$http.get('search/tags/related/' + keyword).then(res => {
             if (res.data.code === 0) {
                 this.tags = res.data.data;
             }
+            setTimeout(() => {
+                this.showTags = true;
+            }, 100)
         })
         NProgress.done();
     },
@@ -132,7 +142,7 @@ export default {
     },
     beforeRouteLeave(to, from, next) {
         this.scrollNum = document.documentElement.scrollTop || document.body.scrollTop
-        this.show = false;
+        this.showAtlas = false;
         next();
     },
     activated() {
@@ -142,8 +152,9 @@ export default {
             this.currPage = 1;
             this.search(keyword);
             this.getTags(keyword);
-        }else {
-            this.show = true;
+            document.title = keyword + " - 搜索结果 - tetto";
+        } else {
+            this.showAtlas = true;
         }
         //组件激活时，将离开组件是记录的页面位置赋值
         if (this.scrollNum !== null && this.scrollNum > 0) {
