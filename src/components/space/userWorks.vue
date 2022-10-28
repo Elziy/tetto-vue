@@ -29,6 +29,18 @@ export default {
             works: []
         };
     },
+    methods: {
+        getWorks(uid) {
+            this.$http.get('image/atlas/info/' + uid).then(res => {
+                if (res.data.code === 0) {
+                    this.works = res.data.data;
+                }
+            })
+            setTimeout(() => {
+                this.show = true;
+            }, 40);
+        },
+    },
     beforeCreate() {
         NProgress.start();
         let uid = this.$route.params.uid;
@@ -61,7 +73,7 @@ export default {
         setTimeout(() => {
             this.show = true;
         }, 40);
-    }
+    },
 }
 </script>
 

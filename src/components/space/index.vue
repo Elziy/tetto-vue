@@ -11,7 +11,7 @@
         </el-main>
         <!--作品和收藏-->
         <div class="container">
-            <works-and-likes></works-and-likes>
+            <works-and-likes ref="worksAndLikes"></works-and-likes>
         </div>
     </div>
 </template>
@@ -43,6 +43,15 @@ export default {
     },
     beforeRouteLeave(to, from, next) {
         this.scrollNum = document.documentElement.scrollTop || document.body.scrollTop
+        next();
+    },
+    beforeRouteUpdate(to, from, next) {
+        let uid = to.params.uid;
+        this.$store.dispatch("space/setUserInfo", uid);
+        setTimeout(() => {
+            this.show = true;
+        }, 60);
+        this.$refs.worksAndLikes.$refs.userWorks.getWorks(uid);
         next();
     },
     activated() {

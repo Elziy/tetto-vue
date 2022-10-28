@@ -18,7 +18,7 @@
                 <div>
                     <el-row type="flex" class="row-bg">
                         <el-col :span="6">
-                            <el-link :underline="false" class="follow" @click="following">
+                            <el-link :underline="false" class="follow" @click="following()">
                                 关注 <span class="follow-span">{{ $store.state.space.userInfo.following || 0 }}</span>
                             </el-link>
                         </el-col>
@@ -28,6 +28,7 @@
                             </el-link>
                         </el-col>
                     </el-row>
+                    <following-dialog></following-dialog>
                 </div>
                 <div v-if="this.$store.state.space.userInfo.introduce" style="padding-top: 10px">
                     <span style="font-size: 14px;color: #606266">个人介绍</span>
@@ -82,13 +83,15 @@
 <script>
 import userInfoDialog from "@/components/space/userInfoDialog";
 import userInfoChangeDialog from "@/components/space/userInfoChangeDialog";
+import followingDialog from "@/components/space/followingDialog";
 import axios from "axios";
 
 export default {
     name: "userInfo",
     components: {
         userInfoDialog,
-        userInfoChangeDialog
+        userInfoChangeDialog,
+        followingDialog
     },
     data() {
         return {
@@ -98,10 +101,32 @@ export default {
     },
     methods: {
         following() {
-            this.$message.success("关注")
+            if (!this.$store.state.space.self) {
+                this.$message.warning("只能查看自己的关注列表");
+                return;
+            }
+            if (this.$store.state.space.userInfo.following === 0) {
+                this.$message({
+                    message: '您还没有关注任何人',
+                    type: 'warning'
+                });
+            } else {
+                this.$store.commit('space/OPEN_FOLLOWING', 'following')
+            }
         },
         followers() {
-            this.$message.success("粉丝")
+            if (!this.$store.state.space.self) {
+                this.$message.warning("只能查看自己的粉丝列表");
+                return;
+            }
+            if (this.$store.state.space.userInfo.followers === 0) {
+                this.$message({
+                    message: '您还没有粉丝',
+                    type: 'warning'
+                });
+            } else {
+                this.$store.commit('space/OPEN_FOLLOWING', 'follower')
+            }
         },
         userInfo() {
             this.infoDialog = !this.infoDialog
@@ -153,13 +178,6 @@ export default {
     padding-left: 60px;
 }
 
-.face-img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    /*align-items: center;*/
-}
-
 .follow:hover {
     text-decoration: none;
     color: #333333;
@@ -168,7 +186,6 @@ export default {
 .follow-span {
     font-weight: bold;
     font-size: 19px;
-    /*color: rgba(51, 51, 51, 0.99);*/
 }
 
 .info-change-button {

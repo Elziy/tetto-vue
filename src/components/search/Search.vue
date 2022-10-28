@@ -183,8 +183,8 @@ export default {
     display: flex;
     -webkit-box-align: center;
     align-items: center;
-    -webkit-box-pack: start;
-    justify-content: start;
+    /*-webkit-box-pack: justify;*/
+    /*justify-content: start;*/
 }
 
 .ghVHhh {

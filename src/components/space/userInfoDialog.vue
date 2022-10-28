@@ -1,7 +1,7 @@
 <template>
     <el-dialog :visible.sync="dialog"
                @close="closeLog"
-               top="50px"
+               top="130px"
     >
         <div style="text-align: center">
             <el-avatar :size="80" :src="userInfo.avatar" alt="avatar">

@@ -1,7 +1,7 @@
 <template>
     <el-tabs v-model="activeName" type="card" @tab-click="tabClick" :before-leave="before">
         <el-tab-pane label="作品" name="works">
-            <user-works></user-works>
+            <user-works ref="userWorks"></user-works>
         </el-tab-pane>
         <el-tab-pane v-if="$store.state.space.self" label="收藏" name="likes">
             <user-likes empty="暂无收藏"></user-likes>

@@ -37,11 +37,22 @@ const actions = {
 const mutations = {
 	SET_USER_INFO(state, userInfo) {
 		state.userInfo = userInfo
-	}
+	},
+	OPEN_FOLLOWING(state, val) {
+		state.flag = val
+		state.followingDialog = true;
+	},
+	CLOSE_FOLLOWING(state) {
+		state.followingDialog = false;
+	},
 }
 const state = {
 	self: false,
 	userInfo: {},
+	// 关注和粉丝列表对话框
+	followingDialog: false,
+	// 'following' 为关注，'follower' 为粉丝
+	flag: ''
 };
 
 export default {
