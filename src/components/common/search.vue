@@ -57,7 +57,12 @@ export default {
     },
     methods: {
         goto(val) {
-            this.$router.push({path: '/tags/' + val});
+            this.$router.push({
+                name: 'tags',
+                params: {
+                    tag: val
+                }
+            })
             this.blur();
         },
         focus() {

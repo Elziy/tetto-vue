@@ -28,11 +28,17 @@ export default {
         toTags(tag) {
             if (this.routerModel === "replace") {
                 this.$router.replace({
-                    path: '/tags/' + tag
+                    name: 'tags',
+                    params: {
+                        tag: tag
+                    }
                 })
             } else {
                 this.$router.push({
-                    path: '/tags/' + tag
+                    name: 'tags',
+                    params: {
+                        tag: tag
+                    }
                 })
             }
         },

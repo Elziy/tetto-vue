@@ -68,8 +68,8 @@ export default {
             disabled: false,
             name: '登录',
             form: {
-                email: "lzy@163.com",
-                password: "123456"
+                email: "",
+                password: ""
             },
             error: {
                 email: "",
